@@ -1,0 +1,6 @@
+<module>
+	<inherits name="com.google.gwt.user.User"/>
+	<entry-point class="org.trieu.client.TestDialog"/>
+	<servlet path="/testservice" class="org.trieu.server.testserviceImpl"/>
+	<inherits name="com.google.gwt.json.JSON"/>
+</module>
