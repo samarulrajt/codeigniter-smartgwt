@@ -128,7 +128,7 @@ class MainApp extends Controller {
 
 		}
 		else {
-			echo "YOU HAVE NO ANTHENTICATION !";
+			echo "ANTHENTICATION FAIL!";
 		}
 
 	}
