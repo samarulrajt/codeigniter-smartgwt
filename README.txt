@@ -4,7 +4,7 @@ Copy the folder in server-side to htdocs of Web Server.
 Go to "\htdocs\vehicle\system\application\config\" for configuration database.
 See more at http://codeigniter.com/user_guide/
 
-2) For client-side
+2) For gwt-side
 
 The gwt-dialog for test calling server using JSON
 The smartGWT will be update in a few days later.

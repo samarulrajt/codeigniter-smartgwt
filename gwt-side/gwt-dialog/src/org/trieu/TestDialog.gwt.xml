@@ -1,0 +1,7 @@
+<module>
+	<inherits name="com.google.gwt.user.User"/>
+	<entry-point class="org.trieu.client.TestDialog"/>
+	<inherits name="org.gwm.GwtWindowManager" />
+	<inherits name="com.google.gwt.json.JSON"/>
+	<entry-point class="org.trieu.client.WindowsManager"/>
+</module>
