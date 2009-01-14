@@ -5,12 +5,7 @@ import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
 import org.trieu.client.beans.ThesisThietBi;
 
-import rocket.json.client.JsonSerializer;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.json.client.JSONValue;
 import com.google.gwt.user.client.Command;
-
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.MenuBar;
@@ -19,7 +14,7 @@ import com.google.gwt.user.client.ui.MenuItem;
 public class MenuBarCPS extends Composite {
 
 	private GDesktopPane desktop;
-	
+
 	public GDesktopPane getDesktop() {
 		return desktop;
 	}
@@ -68,17 +63,18 @@ public class MenuBarCPS extends Composite {
 
 		menuBar_2.addItem("Tìm Model Xe", new Command() {
 			public void execute() {
-				
+
 				ThesisThietBi thietBi = new ThesisThietBi();
 				thietBi.setId(1001);
 				thietBi.setMsThietBi("uwuq");
 				thietBi.setTenThietBi("GPS Bluetooth Receiver");
 				thietBi.setLoaiThietBi("Hand held device");
-				
-				
-				JsonSerializer serializer = (JsonSerializer) GWT.create( ThesisThietBi.class );
-				JSONValue json = serializer.writeJson( thietBi );
-				Window.alert(json.toString());
+
+
+
+				Window.alert(thietBi.toString());
+
+
 			}
 		});
 
@@ -94,13 +90,13 @@ public class MenuBarCPS extends Composite {
 		Composite com = new LoginCPS(win);
 		win.setContent(com);
 		win.setSize(com.getOffsetWidth(), com.getOffsetHeight());
-		win.setResizable(false);	
+		win.setResizable(false);
 		win.setMinimizable(false);
 		win.setMaximizable(false);
 		desktop.addFrame(win);
 		win.setVisible(true);
-	}	
-	
-  
+	}
+
+
 
 }
