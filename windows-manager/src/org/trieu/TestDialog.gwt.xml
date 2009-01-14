@@ -1,0 +1,11 @@
+<module>
+	<inherits name="com.google.gwt.http.HTTP"/>
+	<inherits name="com.google.gwt.user.User"/>
+	<entry-point class="org.trieu.client.TestDialog"/>
+	<inherits name="org.gwm.GwtWindowManager" />
+	<inherits name="com.google.gwt.json.JSON"/>
+	<inherits name="Rocket.User" />
+	<entry-point class="org.trieu.client.WindowsManager"/>
+	
+
+</module>
