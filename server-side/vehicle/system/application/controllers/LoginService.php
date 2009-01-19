@@ -39,11 +39,12 @@ class LoginService extends Controller{
 		if($this->username == "admin" && $this->password == "8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918")
 		{
 			$session_id = $this->setSession($this->username);
-			$jsonReq = array("session" => $session_id );
+			$jsonReq = array("session" => $session_id, "prkey" => time() );
 			echo jsonEncode($jsonReq);
 		}
 		else
 		{
+			
 			echo '{"session":"@@@"}';
 		}
 	}

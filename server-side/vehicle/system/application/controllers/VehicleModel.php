@@ -42,5 +42,14 @@ class VehicleModel extends Controller {
 		$data['encoded_data'] =  $jsonReq;
 		$this->load->view('json', $data);
 	}
+	
+	function test($session) {
+		$data = strip_tags("<script>alert('hacked')</script>2 my name is ".$_POST['myname']);
+		if($session === "1234")
+			echo $data; 
+		else
+			echo "WRONG";
+	}
+	
 }
 ?>
