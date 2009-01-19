@@ -3,7 +3,11 @@
 	<inherits name="com.google.gwt.user.User"/>
 	<inherits name="org.gwm.GwtWindowManager" />
 	<inherits name="com.google.gwt.json.JSON"/>
-	
+	<inherits name="com.smartgwt.SmartGwt"/>
+	<inherits name="com.google.gwt.maps.GoogleMaps"/> 
+	<!-- 	Google Map script 
+		<script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;key=ABQIAAAARCn-s2Rb8Qeo5T853_i8KhTPJQkavyWDxmYjA5lpKmshS0aD2hRdWozSifvfBxQ5FL5NdfrRlth89w" />
+			-->
 	<entry-point class="org.trieu.client.WindowsManager"/>
 	<inherits name="net.ffxml.gwt.json.JsonRpc"/>
 </module>

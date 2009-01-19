@@ -10,11 +10,11 @@ import net.ffxml.gwt.json.client.JsonRpc;
 import org.gwm.client.GDesktopPane;
 import org.gwm.client.GInternalFrame;
 import org.gwm.client.impl.DefaultGInternalFrame;
-import org.trieu.client.beans.ThesisChiNhanh;
-import org.trieu.client.beans.ThesisModelXe;
-import org.trieu.client.beans.ThesisThietBi;
-import org.trieu.client.beans.ThesisXe;
-import org.trieu.client.view.ThesisModelXeCPS;
+import org.trieu.client.model.ThesisChiNhanh;
+import org.trieu.client.model.ThesisModelXe;
+import org.trieu.client.model.ThesisThietBi;
+import org.trieu.client.model.ThesisXe;
+import org.trieu.client.view.EquipmentCPS;
 
 import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.Window;
@@ -83,23 +83,23 @@ public class MenuBarCPS extends Composite {
 				thietBi.setMsThietBi("uwuq");
 				thietBi.setTenThietBi("GPS Bluetooth Receiver");
 				thietBi.setLoaiThietBi("Hand held device");
-				
+
 				ThesisChiNhanh chiNhanh = new ThesisChiNhanh();
 				chiNhanh.msChiNhanh = "CN1";
 				chiNhanh.tenChiNhanh = "Chi nhanh so 1";
-				
+
 				Map map = new HashMap();
 				map.put("msChiNhanh", chiNhanh.msChiNhanh);
 				ArrayList<Long> list = new ArrayList<Long>();
 				list.add(1001L);
 				list.add(1002L);
 				list.add(1004L);
-				
+
 				map.put("tenChiNhanh", list);
-				
+
 				JsonRpc rpc = new JsonRpc();
-				
-				
+
+
 				ThesisXe xe = new ThesisXe();
 				xe.setMsThietBi("GP1");
 				xe.setId(100l);
@@ -110,7 +110,7 @@ public class MenuBarCPS extends Composite {
 
 				ThesisModelXe modelXe = new ThesisModelXe();
 				modelXe.setMsModelXe("4545KA");
-				
+
 				Window.alert(modelXe.toJson());
 
 
@@ -135,10 +135,10 @@ public class MenuBarCPS extends Composite {
 		desktop.addFrame(win);
 		win.setVisible(true);
 	}
-	
+
 	public void ThesisModelXeWindow(){
 		GInternalFrame win = new DefaultGInternalFrame("Nhập model xe");
-		Composite com = new ThesisModelXeCPS(win);
+		Composite com = new EquipmentCPS(win);
 		win.setContent(com);
 		win.setSize(com.getOffsetWidth(), com.getOffsetHeight());
 		win.setResizable(true);
