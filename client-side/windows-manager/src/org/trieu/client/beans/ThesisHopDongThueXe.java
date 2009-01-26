@@ -1,4 +1,4 @@
-package org.trieu.client.beans;
+package org.trieu.client.model;
 
 /***********************************************************************
  * Module:  ThesisHopDongThueXe.java

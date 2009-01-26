@@ -1,4 +1,4 @@
-package org.trieu.client.beans;
+package org.trieu.client.model;
 
 /***********************************************************************
  * Module:  ThesisXe.java
@@ -6,15 +6,14 @@ package org.trieu.client.beans;
  * Purpose: Defines the Class ThesisXe
  ***********************************************************************/
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
 
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;
-import com.google.gwt.json.client.JSONParser;
 import com.google.gwt.json.client.JSONString;
 import com.google.gwt.json.client.JSONValue;
-
-import net.ffxml.gwt.json.client.JsonRpc;
+import com.smartgwt.client.widgets.grid.ListGridRecord;
 
 /** @pdOid 1d6a662e-db81-4308-a8af-fd4b91b51738 */
 public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
@@ -30,6 +29,7 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	private Date ngayCapNhat;
 
 	/** @pdOid 72121370-df80-4325-9fc6-25ee17db88f6 */
+	@Override
 	protected void finalize() {
 		// TODO: implement
 	}
@@ -139,15 +139,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<ThesisThuocTinhMoRongCuaXe> getThesisThuocTinhMoRongCuaXe() {
-		if (thesisThuocTinhMoRongCuaXe == null)
+		if (thesisThuocTinhMoRongCuaXe == null) {
 			thesisThuocTinhMoRongCuaXe = new java.util.HashSet<ThesisThuocTinhMoRongCuaXe>();
+		}
 		return thesisThuocTinhMoRongCuaXe;
 	}
 
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorThesisThuocTinhMoRongCuaXe() {
-		if (thesisThuocTinhMoRongCuaXe == null)
+		if (thesisThuocTinhMoRongCuaXe == null) {
 			thesisThuocTinhMoRongCuaXe = new java.util.HashSet<ThesisThuocTinhMoRongCuaXe>();
+		}
 		return thesisThuocTinhMoRongCuaXe.iterator();
 	}
 
@@ -159,9 +161,10 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 			java.util.Collection<ThesisThuocTinhMoRongCuaXe> newThesisThuocTinhMoRongCuaXe) {
 		removeAllThesisThuocTinhMoRongCuaXe();
 		for (java.util.Iterator iter = newThesisThuocTinhMoRongCuaXe.iterator(); iter
-				.hasNext();)
+				.hasNext();) {
 			addThesisThuocTinhMoRongCuaXe((ThesisThuocTinhMoRongCuaXe) iter
 					.next());
+		}
 	}
 
 	/**
@@ -170,10 +173,12 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void addThesisThuocTinhMoRongCuaXe(
 			ThesisThuocTinhMoRongCuaXe newThesisThuocTinhMoRongCuaXe) {
-		if (newThesisThuocTinhMoRongCuaXe == null)
+		if (newThesisThuocTinhMoRongCuaXe == null) {
 			return;
-		if (this.thesisThuocTinhMoRongCuaXe == null)
+		}
+		if (this.thesisThuocTinhMoRongCuaXe == null) {
 			this.thesisThuocTinhMoRongCuaXe = new java.util.HashSet<ThesisThuocTinhMoRongCuaXe>();
+		}
 		if (!this.thesisThuocTinhMoRongCuaXe
 				.contains(newThesisThuocTinhMoRongCuaXe)) {
 			this.thesisThuocTinhMoRongCuaXe.add(newThesisThuocTinhMoRongCuaXe);
@@ -187,15 +192,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void removeThesisThuocTinhMoRongCuaXe(
 			ThesisThuocTinhMoRongCuaXe oldThesisThuocTinhMoRongCuaXe) {
-		if (oldThesisThuocTinhMoRongCuaXe == null)
+		if (oldThesisThuocTinhMoRongCuaXe == null) {
 			return;
-		if (this.thesisThuocTinhMoRongCuaXe != null)
+		}
+		if (this.thesisThuocTinhMoRongCuaXe != null) {
 			if (this.thesisThuocTinhMoRongCuaXe
 					.contains(oldThesisThuocTinhMoRongCuaXe)) {
 				this.thesisThuocTinhMoRongCuaXe
 						.remove(oldThesisThuocTinhMoRongCuaXe);
 				oldThesisThuocTinhMoRongCuaXe.setThesisXe((ThesisXe) null);
 			}
+		}
 	}
 
 	/** @pdGenerated default removeAll */
@@ -214,15 +221,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<ThesisBaoDuongXe> getThesisBaoDuongXe() {
-		if (thesisBaoDuongXe == null)
+		if (thesisBaoDuongXe == null) {
 			thesisBaoDuongXe = new java.util.HashSet<ThesisBaoDuongXe>();
+		}
 		return thesisBaoDuongXe;
 	}
 
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorThesisBaoDuongXe() {
-		if (thesisBaoDuongXe == null)
+		if (thesisBaoDuongXe == null) {
 			thesisBaoDuongXe = new java.util.HashSet<ThesisBaoDuongXe>();
+		}
 		return thesisBaoDuongXe.iterator();
 	}
 
@@ -234,8 +243,9 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 			java.util.Collection<ThesisBaoDuongXe> newThesisBaoDuongXe) {
 		removeAllThesisBaoDuongXe();
 		for (java.util.Iterator iter = newThesisBaoDuongXe.iterator(); iter
-				.hasNext();)
+				.hasNext();) {
 			addThesisBaoDuongXe((ThesisBaoDuongXe) iter.next());
+		}
 	}
 
 	/**
@@ -243,10 +253,12 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 * @param newThesisBaoDuongXe
 	 */
 	public void addThesisBaoDuongXe(ThesisBaoDuongXe newThesisBaoDuongXe) {
-		if (newThesisBaoDuongXe == null)
+		if (newThesisBaoDuongXe == null) {
 			return;
-		if (this.thesisBaoDuongXe == null)
+		}
+		if (this.thesisBaoDuongXe == null) {
 			this.thesisBaoDuongXe = new java.util.HashSet<ThesisBaoDuongXe>();
+		}
 		if (!this.thesisBaoDuongXe.contains(newThesisBaoDuongXe)) {
 			this.thesisBaoDuongXe.add(newThesisBaoDuongXe);
 			newThesisBaoDuongXe.setThesisXe(this);
@@ -258,13 +270,15 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 * @param oldThesisBaoDuongXe
 	 */
 	public void removeThesisBaoDuongXe(ThesisBaoDuongXe oldThesisBaoDuongXe) {
-		if (oldThesisBaoDuongXe == null)
+		if (oldThesisBaoDuongXe == null) {
 			return;
-		if (this.thesisBaoDuongXe != null)
+		}
+		if (this.thesisBaoDuongXe != null) {
 			if (this.thesisBaoDuongXe.contains(oldThesisBaoDuongXe)) {
 				this.thesisBaoDuongXe.remove(oldThesisBaoDuongXe);
 				oldThesisBaoDuongXe.setThesisXe((ThesisXe) null);
 			}
+		}
 	}
 
 	/** @pdGenerated default removeAll */
@@ -282,15 +296,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<ThesisThietBi> getThesisThietBi() {
-		if (thesisThietBi == null)
+		if (thesisThietBi == null) {
 			thesisThietBi = new java.util.HashSet<ThesisThietBi>();
+		}
 		return thesisThietBi;
 	}
 
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorThesisThietBi() {
-		if (thesisThietBi == null)
+		if (thesisThietBi == null) {
 			thesisThietBi = new java.util.HashSet<ThesisThietBi>();
+		}
 		return thesisThietBi.iterator();
 	}
 
@@ -302,8 +318,9 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 			java.util.Collection<ThesisThietBi> newThesisThietBi) {
 		removeAllThesisThietBi();
 		for (java.util.Iterator iter = newThesisThietBi.iterator(); iter
-				.hasNext();)
+				.hasNext();) {
 			addThesisThietBi((ThesisThietBi) iter.next());
+		}
 	}
 
 	/**
@@ -311,10 +328,12 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 * @param newThesisThietBi
 	 */
 	public void addThesisThietBi(ThesisThietBi newThesisThietBi) {
-		if (newThesisThietBi == null)
+		if (newThesisThietBi == null) {
 			return;
-		if (this.thesisThietBi == null)
+		}
+		if (this.thesisThietBi == null) {
 			this.thesisThietBi = new java.util.HashSet<ThesisThietBi>();
+		}
 		if (!this.thesisThietBi.contains(newThesisThietBi)) {
 			this.thesisThietBi.add(newThesisThietBi);
 			newThesisThietBi.setThesisXe(this);
@@ -326,13 +345,15 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 * @param oldThesisThietBi
 	 */
 	public void removeThesisThietBi(ThesisThietBi oldThesisThietBi) {
-		if (oldThesisThietBi == null)
+		if (oldThesisThietBi == null) {
 			return;
-		if (this.thesisThietBi != null)
+		}
+		if (this.thesisThietBi != null) {
 			if (this.thesisThietBi.contains(oldThesisThietBi)) {
 				this.thesisThietBi.remove(oldThesisThietBi);
 				oldThesisThietBi.setThesisXe((ThesisXe) null);
 			}
+		}
 	}
 
 	/** @pdGenerated default removeAll */
@@ -350,15 +371,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<ThesisNhatKiHanhTrinh> getThesisNhatKiHanhTrinh() {
-		if (thesisNhatKiHanhTrinh == null)
+		if (thesisNhatKiHanhTrinh == null) {
 			thesisNhatKiHanhTrinh = new java.util.HashSet<ThesisNhatKiHanhTrinh>();
+		}
 		return thesisNhatKiHanhTrinh;
 	}
 
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorThesisNhatKiHanhTrinh() {
-		if (thesisNhatKiHanhTrinh == null)
+		if (thesisNhatKiHanhTrinh == null) {
 			thesisNhatKiHanhTrinh = new java.util.HashSet<ThesisNhatKiHanhTrinh>();
+		}
 		return thesisNhatKiHanhTrinh.iterator();
 	}
 
@@ -370,8 +393,9 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 			java.util.Collection<ThesisNhatKiHanhTrinh> newThesisNhatKiHanhTrinh) {
 		removeAllThesisNhatKiHanhTrinh();
 		for (java.util.Iterator iter = newThesisNhatKiHanhTrinh.iterator(); iter
-				.hasNext();)
+				.hasNext();) {
 			addThesisNhatKiHanhTrinh((ThesisNhatKiHanhTrinh) iter.next());
+		}
 	}
 
 	/**
@@ -380,10 +404,12 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void addThesisNhatKiHanhTrinh(
 			ThesisNhatKiHanhTrinh newThesisNhatKiHanhTrinh) {
-		if (newThesisNhatKiHanhTrinh == null)
+		if (newThesisNhatKiHanhTrinh == null) {
 			return;
-		if (this.thesisNhatKiHanhTrinh == null)
+		}
+		if (this.thesisNhatKiHanhTrinh == null) {
 			this.thesisNhatKiHanhTrinh = new java.util.HashSet<ThesisNhatKiHanhTrinh>();
+		}
 		if (!this.thesisNhatKiHanhTrinh.contains(newThesisNhatKiHanhTrinh)) {
 			this.thesisNhatKiHanhTrinh.add(newThesisNhatKiHanhTrinh);
 			newThesisNhatKiHanhTrinh.setThesisXe(this);
@@ -396,13 +422,15 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void removeThesisNhatKiHanhTrinh(
 			ThesisNhatKiHanhTrinh oldThesisNhatKiHanhTrinh) {
-		if (oldThesisNhatKiHanhTrinh == null)
+		if (oldThesisNhatKiHanhTrinh == null) {
 			return;
-		if (this.thesisNhatKiHanhTrinh != null)
+		}
+		if (this.thesisNhatKiHanhTrinh != null) {
 			if (this.thesisNhatKiHanhTrinh.contains(oldThesisNhatKiHanhTrinh)) {
 				this.thesisNhatKiHanhTrinh.remove(oldThesisNhatKiHanhTrinh);
 				oldThesisNhatKiHanhTrinh.setThesisXe((ThesisXe) null);
 			}
+		}
 	}
 
 	/** @pdGenerated default removeAll */
@@ -420,15 +448,17 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 
 	/** @pdGenerated default getter */
 	public java.util.Collection<ThesisLichSuCapNhatXe> getThesisLichSuCapNhatXe() {
-		if (thesisLichSuCapNhatXe == null)
+		if (thesisLichSuCapNhatXe == null) {
 			thesisLichSuCapNhatXe = new java.util.HashSet<ThesisLichSuCapNhatXe>();
+		}
 		return thesisLichSuCapNhatXe;
 	}
 
 	/** @pdGenerated default iterator getter */
 	public java.util.Iterator getIteratorThesisLichSuCapNhatXe() {
-		if (thesisLichSuCapNhatXe == null)
+		if (thesisLichSuCapNhatXe == null) {
 			thesisLichSuCapNhatXe = new java.util.HashSet<ThesisLichSuCapNhatXe>();
+		}
 		return thesisLichSuCapNhatXe.iterator();
 	}
 
@@ -440,8 +470,9 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 			java.util.Collection<ThesisLichSuCapNhatXe> newThesisLichSuCapNhatXe) {
 		removeAllThesisLichSuCapNhatXe();
 		for (java.util.Iterator iter = newThesisLichSuCapNhatXe.iterator(); iter
-				.hasNext();)
+				.hasNext();) {
 			addThesisLichSuCapNhatXe((ThesisLichSuCapNhatXe) iter.next());
+		}
 	}
 
 	/**
@@ -450,10 +481,12 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void addThesisLichSuCapNhatXe(
 			ThesisLichSuCapNhatXe newThesisLichSuCapNhatXe) {
-		if (newThesisLichSuCapNhatXe == null)
+		if (newThesisLichSuCapNhatXe == null) {
 			return;
-		if (this.thesisLichSuCapNhatXe == null)
+		}
+		if (this.thesisLichSuCapNhatXe == null) {
 			this.thesisLichSuCapNhatXe = new java.util.HashSet<ThesisLichSuCapNhatXe>();
+		}
 		if (!this.thesisLichSuCapNhatXe.contains(newThesisLichSuCapNhatXe)) {
 			this.thesisLichSuCapNhatXe.add(newThesisLichSuCapNhatXe);
 			newThesisLichSuCapNhatXe.setThesisXe(this);
@@ -466,13 +499,15 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 	 */
 	public void removeThesisLichSuCapNhatXe(
 			ThesisLichSuCapNhatXe oldThesisLichSuCapNhatXe) {
-		if (oldThesisLichSuCapNhatXe == null)
+		if (oldThesisLichSuCapNhatXe == null) {
 			return;
-		if (this.thesisLichSuCapNhatXe != null)
+		}
+		if (this.thesisLichSuCapNhatXe != null) {
 			if (this.thesisLichSuCapNhatXe.contains(oldThesisLichSuCapNhatXe)) {
 				this.thesisLichSuCapNhatXe.remove(oldThesisLichSuCapNhatXe);
 				oldThesisLichSuCapNhatXe.setThesisXe((ThesisXe) null);
 			}
+		}
 	}
 
 	/** @pdGenerated default removeAll */
@@ -512,12 +547,21 @@ public class ThesisXe extends JSONObject implements Jsonizer<ThesisXe> {
 		}
 	}
 
-	public String toJson() {	
+	public String toJson() {
 		this.put("soDangKyXe", new JSONString(soDangKyXe));
 		this.put("msThietBi", new JSONString(msThietBi));
 		this.put("theTichThat", new JSONNumber(theTichThat));
 		this.put("ngayCapNhat",  new JSONNumber(ngayCapNhat.getTime()));
 		return this.toString();
+	}
+
+	public ListGridRecord[] toRecords(String json){
+		ArrayList<JSONValue> array = JsonUtils.toArray(json);
+		ListGridRecord[] records = new ListGridRecord[array.size()];
+		for (JSONValue value : array) {
+
+		}
+		return records;
 	}
 
 	public ThesisXe fromJson(String json) {

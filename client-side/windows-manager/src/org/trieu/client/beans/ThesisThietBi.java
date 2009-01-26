@@ -1,4 +1,4 @@
-package org.trieu.client.beans;
+package org.trieu.client.model;
 
 import com.google.gwt.json.client.JSONNumber;
 import com.google.gwt.json.client.JSONObject;

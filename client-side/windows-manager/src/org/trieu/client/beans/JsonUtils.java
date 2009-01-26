@@ -1,4 +1,4 @@
-package org.trieu.client.beans;
+package org.trieu.client.model;
 
 import java.util.ArrayList;
 import java.util.Date;
