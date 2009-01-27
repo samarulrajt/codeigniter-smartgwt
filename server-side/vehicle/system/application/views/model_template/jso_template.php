@@ -1,3 +1,4 @@
+<?php echo "//Create by GWT Igniter Engine\n\n" ?>
 
 import com.google.gwt.core.client.JavaScriptObject;
 
