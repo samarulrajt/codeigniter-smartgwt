@@ -41,6 +41,7 @@ class LoginService extends Controller{
 			$session_id = $this->setSession($this->username);
 			$jsonReq = array("session" => $session_id, "prkey" => time() );
 			echo jsonEncode($jsonReq);
+            
 		}
 		else
 		{

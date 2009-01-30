@@ -7,6 +7,7 @@ class metadatabase extends Controller{
 		parent::Controller();
 		$this->load->database();
 		$this->load->library('parser');
+        $this->load->helper('url');
 	}
 
 	function tables() {
@@ -19,7 +20,7 @@ class metadatabase extends Controller{
 
 			foreach ($fields as $field)
 			{
-				$table_object->addField($field->name, DBUtils::MySQLTypeMapping($field->type) );
+				$table_object->addField($field->name, DBUtils::MySQLTypeMapping2Java($field->type) );
 				echo $field->name;	echo "<br/>";
 				echo $field->type;	echo "<br/>";
 				echo $field->max_length;	echo "<br/>";
@@ -90,23 +91,33 @@ class metadatabase extends Controller{
                         // add field for table object
                         if($col['Key'])
                         {
-                           $table_object->addField( $col['Field'], DBUtils::MySQLTypeMapping($col['Type']), true);
+                           $table_object->addField3( $col['Field'], DBUtils::MySQLTypeMapping2Java($col['Type']), true);
                         }
                         else
                         {
-                           $table_object->addField( $col['Field'], DBUtils::MySQLTypeMapping($col['Type']));
+                           $table_object->addField3( $col['Field'], DBUtils::MySQLTypeMapping2Java($col['Type']));
                         }
 					}
 					mysql_free_result($cols);
 
-                    if($option === "jso")
+                  //  if($option === "jso")
                     {
                         $this->createJSO($table_object);
                     }
-                    else if($option === "ci_model")
+                  //  else if($option === "ci_model")
                     {
                         $this->createCIModel($table_object);
                     }
+                  //  else if($option === "ci_controller")
+                    {
+                        $this->createCIController($table_object);
+                    }
+
+                    {
+                        $this->createCIView($table_object);
+                    }
+
+                    echo "<hr/>";
 				}
 			}
 			// Output results
@@ -135,16 +146,32 @@ class metadatabase extends Controller{
 		echo "<h3>Created JSO object: ".$table_object->table_name."</h3>";
 		$metadata['object_name'] = $table_object->table_name;
 		$metadata['fields'] = $table_object->fields;
-		$stringData = $this->load->view('model_template/jso_template', $metadata, true);
-		$this->createJSOFile($table_object->table_name,$stringData);
+		$stringData = $this->load->view('template/gwt_jso_template', $metadata, true);
+		$this->createJavaFile($table_object->table_name,$stringData);
 	}
 
     function createCIModel($table_object) {
-        echo "<h3>Created CI model: ".$table_object->table_name."</h3>";
+        echo "<h3>Created CI Model: ".$table_object->table_name."</h3>";
 		$metadata['object_name'] = $table_object->table_name;
 		$metadata['fields'] = $table_object->fields;
-		$stringData = $this->load->view('model_template/ci_model_template', $metadata, true);
-		$this->createCI_ModelFile($table_object->table_name,$stringData);
+		$stringData = $this->load->view('template/ci_model_template', $metadata, true);
+		$this->createPHPFile($table_object->table_name,$stringData,"model");
+    }
+
+    function createCIView($table_object) {
+        echo "<h3>Created CI View: ".$table_object->table_name."</h3>";
+		$metadata['object_name'] = $table_object->table_name;
+		$metadata['fields'] = $table_object->fields;
+		$stringData = $this->load->view('template/ci_view_template', $metadata, true);
+		$this->createPHPFile($table_object->table_name,$stringData,"view");
+    }
+
+    function createCIController($table_object) {
+        echo "<h3>Created CI Controller: ".$table_object->table_name."</h3>";
+		$metadata['object_name'] = $table_object->table_name;
+		$metadata['fields'] = $table_object->fields;
+		$stringData = $this->load->view('template/ci_controller_template', $metadata, true);
+		$this->createPHPFile($table_object->table_name,$stringData, "controllers");
     }
 
 	/**
@@ -152,7 +179,7 @@ class metadatabase extends Controller{
 	 * @param $stringData
 	 * @return unknown_type
 	 */
-	function createJSOFile($filename,$stringData) {
+	function createJavaFile($filename,$stringData) {
 		$ourFileName = "javaORmapping/".$filename.".java";
 		$fh = fopen($ourFileName, 'w') or die("can't open file");
 		fwrite($fh, $stringData);
@@ -164,11 +191,28 @@ class metadatabase extends Controller{
 	 * @param $stringData
 	 * @return unknown_type
 	 */
-	function createCI_ModelFile($filename,$stringData) {
-		$ourFileName = "system/application/models/".$filename.".php";
-		$fh = fopen($ourFileName, 'w') or die("can't open file");
-		fwrite($fh, $stringData);
-		fclose($fh);
+	function createPHPFile($filename,$stringData,$type) {
+        if($type === "model" )
+        {
+            $ourFileName = "system/application/models/".$filename.".php";
+            $fh = fopen($ourFileName, 'w') or die("can't open file");
+            fwrite($fh, $stringData);
+            fclose($fh);
+        }
+        else if($type === "controllers" )
+        {
+            $ourFileName = "system/application/controllers/".$filename."_c.php";
+            $fh = fopen($ourFileName, 'w') or die("can't open file");
+            fwrite($fh, $stringData);
+            fclose($fh);
+        }
+        else if($type === "view" )
+        {
+            $ourFileName = "system/application/views/".$filename."_v.php";
+            $fh = fopen($ourFileName, 'w') or die("can't open file");
+            fwrite($fh, $stringData);
+            fclose($fh);
+        }
 	}
 
 
@@ -207,8 +251,14 @@ class Table {
 	function getFieldSize() {
 		return $this->c;
 	}
-	public function addField($name,$type, $isKey = false) {
+	public function addField3($name,$type, $isKey = false) {
 		$this->fields[$this->c++] = new TableField($name, $type, $isKey);
+	}
+    public function addField5($name,$type, $isKey = false,$isAutoIncrement = false, $default = '') {
+		$this->fields[$this->c++] = new TableField($name, $type, $isKey, $isAutoIncrement, $default);
+	}
+    public function addField1($tablefield) {
+		$this->fields[$this->c++] = $tablefield;
 	}
 }
 
@@ -216,16 +266,31 @@ class TableField {
 	public $name ;
 	public $type ;
     public $isKey = false;
+    public $isAutoIncrement = false;
+    public $default;
 
 	function TableField($name,$type,$isKey ) {
 		$this->name = $name;
 		$this->type = $type;
         $this->isKey = $isKey;
 	}
+    function TableField4($name,$type,$isKey,$isAutoIncrement ) {
+		$this->name = $name;
+		$this->type = $type;
+        $this->isKey = $isKey;
+        $this->isAutoIncrement = $isAutoIncrement;
+	}
+    function TableField5($name,$type,$isKey,$isAutoIncrement,$default ) {
+		$this->name = $name;
+		$this->type = $type;
+        $this->isKey = $isKey;
+        $this->isAutoIncrement = $isAutoIncrement;
+        $this->default = $default;
+	}
 }
 
 class DBUtils {
-	public static function MySQLTypeMapping($mysqlType) {
+	public static function MySQLTypeMapping2Java($mysqlType) {
 		//we got bigint(20),so trip it to bigint
 		$pos = strpos($mysqlType, "(");
 		if($pos > 0)
@@ -249,7 +314,7 @@ class DBUtils {
 				{
 					return "Long";
 				}
-			case "real":
+			case "real": case "float":
 				{
 					return "Float";
 				}
