@@ -2,48 +2,60 @@
 
 class <?=ucwords($object_name)?>_c extends Controller
 {
+    //message in vietnamese, TODO: add I18N later
+    var $messageSuccess = "Thành công";
+    var $messageFail    = "Thất bại";
+
     function <?=ucwords($object_name)?>_c()
     {
          parent::Controller();
          $this->load->model('<?=$object_name?>');
          $this->load->helper('form');
          $this->load->helper('object2array');
+         $this->load->library('form_validation');
     }
 
 
 
     private function get_form_view()
     {
-        $form =  form_open();
+        $attributes = array('id' => 'main_form');
+        $form =  form_open("",$attributes);
 
-        $form = $form . form_fieldset('<?=ucwords($object_name)?>: ');
-        $form = $form . "<p>" ;
+        //$form = $form . form_fieldset('<?=ucwords($object_name)?>: ');
 
+        $inputmask_script = "";
         <?php foreach($fields as $field):?>
-           $form = $form . form_label('<?=$field->name?>', '<?=$field->name?>') ."\n";
+           $form = $form . "<label><span><?=$field->name?></span>\n";
 
            $the_field = new stdClass();
-           $the_field->name = "<?=$field->name?>'";
-           $the_field->style = "margin:5px;";
+           $the_field->name = "<?=$field->name?>";          
            $the_field->value = "";
-           $the_field->id = "txt_<?=$field->name?>";
-           
-           $js = "onchange='<?=ucwords($object_name)?>.setData(this.name,this.value);'";
-           $form = $form . form_input(parseObjectToArray($the_field), $js)."\n";;
+           $the_field->id = "<?=$field->name?>";
 
-           $form = $form . "<br>". "\n";
+           //add class for validation here
+           $the_field->class = "input-text required number";
+           $the_field->onchange = "<?=ucwords($object_name)?>.setData(this.name,this.value);";
+          
+           $form = $form . form_input(parseObjectToArray($the_field))."\n";;
+
+           $form = $form . "</label>". "\n";
+
+           //add input mask here
+           $inputmask_script = $inputmask_script . "$('#<?=$field->name?>').mask('99/99/9999');";
         <?php endforeach;?>
-
-        $form = $form . "</p>" ;
-        $form = $form . form_fieldset_close();
+        
+        //$form = $form . form_fieldset_close();
         $form = $form.form_close()."\n";
 
+        $js_script = "<script type='text/javascript'>  jQuery(function($){". $inputmask_script ."});</script>" ;
+        $form = $form.$js_script;
         return $form;
     }
 
     function index()
     {
-        $data['form_view'] = get_form_view();
+        $data['form_view'] = $this->get_form_view();
         $this->load->view('<?=$object_name?>_v',$data);
         
     }  
@@ -72,13 +84,16 @@ class <?=ucwords($object_name)?>_c extends Controller
     {
     <?php foreach($fields as $field):?>
     <?php if(!$field->isKey): ?>
-    $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
+        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
     <?php endif;?>
     <?php endforeach;?>
-        if($this-><?=$object_name?>->save())
-            echo "done";
-        else
-            echo "fail";
+    
+            if($this-><?=$object_name?>->save())
+                echo $this->messageSuccess; 
+            else
+                echo $this->messageFail;
+           
+      
     }
 
     function read()
@@ -98,7 +113,12 @@ class <?=ucwords($object_name)?>_c extends Controller
     <?php foreach($fields as $field):?>
     $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
     <?php endforeach;?>
-        $this-><?=$object_name?>->save();
+       
+        if($this-><?=$object_name?>->save())
+            echo $this->messageSuccess;
+        else
+            echo $this->messageFail;
+        
     }
 
     function delete()
@@ -108,7 +128,12 @@ class <?=ucwords($object_name)?>_c extends Controller
     $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
     <?php endif;?>
     <?php endforeach;?>
-        $this-><?=$object_name?>->delete();
+
+        if($this-><?=$object_name?>->delete())
+            echo $this->messageSuccess;
+        else
+            echo $this->messageFail;
+        
     }
 
 

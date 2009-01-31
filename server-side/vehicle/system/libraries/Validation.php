@@ -184,7 +184,7 @@ class CI_Validation {
 	 * @return	bool
 	 */		
 	function run()
-	{
+	{       
 		// Do we even have any data to process?  Mm?
 		if (count($_POST) == 0 OR count($this->_rules) == 0)
 		{
