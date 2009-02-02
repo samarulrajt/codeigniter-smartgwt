@@ -1,11 +1,11 @@
 package org.trieu.client.view;
 
 import org.gwm.client.GInternalFrame;
-import org.trieu.client.WComposite;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.ClickListener;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormHandler;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.FormSubmitCompleteEvent;
@@ -14,12 +14,12 @@ import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
-public class EquipmentCPS extends WComposite implements FormHandler{
+public class EquipmentCPS extends Composite implements FormHandler{
 	final FormPanel formPanel = new FormPanel();
 	final Label labelResult = new Label("result here");
 
 	public EquipmentCPS(GInternalFrame frame) {
-		super(frame);
+		//super(frame);
 		formPanel.addFormHandler(this);
 		initWidget(formPanel);
 		final AbsolutePanel absolutePanel = new AbsolutePanel();
