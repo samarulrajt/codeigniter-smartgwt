@@ -1,13 +1,22 @@
 <?php
-
+/**
+ * @property CI_Loader $load
+ * @property CI_Input $input
+ *
+ */
 
 class metadatabase extends Controller{
+
+   
 
 	function metadatabase(){
 		parent::Controller();
 		$this->load->database();
 		$this->load->library('parser');
         $this->load->helper('url');
+        $this->lang->load('fields','vietnamese');
+
+    
 	}
 
 	function tables() {
@@ -49,6 +58,7 @@ class metadatabase extends Controller{
 		}
 	}
 
+    //the power of my solution is here
 	function gwt_igniter($option)
 	{
         if(!isset ($option)){
@@ -74,6 +84,12 @@ class metadatabase extends Controller{
 			{
 				$tableName = $row[0];
                 $table_object = new Table($tableName);//create table object
+                if($this->lang->line($tableName)) {
+                    $table_object->table_fullname = $this->lang->line($tableName);
+                } else {
+                    $table_object->table_fullname = $tableName;
+                }
+                echo "<h1>".$table_object->table_fullname."</h1>";
 
 				// Get meta data
 				$cols = mysql_query("SHOW COLUMNS FROM $tableName", $conn);
@@ -89,20 +105,63 @@ class metadatabase extends Controller{
 						$output[$tableName][$col['Field']] = $col['Type'];
 
                         // add field for table object
-                        if($col['Key'])
-                        {
-                           $table_object->addField3( $col['Field'], DBUtils::MySQLTypeMapping2Java($col['Type']), true);
+                        $field_object = new TableField();
+
+                        $field_object->name = $col['Field'];
+                        $lan_key = $tableName.".".$col['Field'];
+                        if($this->lang->line($lan_key)) {                           
+                            $field_object->fullname = $this->lang->line($lan_key);
+                        } else {
+                            $field_object->fullname = $col['Field'];
                         }
-                        else
+
+                        $field_object->type = DBUtils::MySQLTypeMapping2Java($col['Type']);
+                        $field_object->isNumber = DBUtils::isNumber($col['Type']);
+                        $field_object->isDate = DBUtils::isDate($col['Type']);
+                        
+
+                        $field_object->isString = DBUtils::isString($col['Type']);
+
+                        if($col["Key"] == "PRI")
                         {
-                           $table_object->addField3( $col['Field'], DBUtils::MySQLTypeMapping2Java($col['Type']));
+                            $field_object->setIsKey( true);
                         }
+                        else if($col['Key'] == "MUL")
+                        {
+                            $field_object->setIsForeignKey(true);
+                        }
+                        else if($col['Key'] == "UNI")
+                        {
+                            $field_object->setIsUnique(true);
+                        }
+                        if( $col['Extra'] == "auto_increment")
+                        {
+                            $field_object->isAutoIncrement = true;
+                        }
+
+                        if( $col['Null'] == "NO")
+                        {
+                            $field_object->isRequire = true;
+                        }
+                        if( $col['Default'] )
+                        {
+                            $field_object->default = $col['Default'];
+                        }
+
+                        //add max length
+                        $l = DBUtils::StringLength($col['Type']);
+                        if($l > 0 )
+                        {
+                            $field_object->maxLength = $l;
+                        }
+
+                        $table_object->addField1($field_object);
 					}
 					mysql_free_result($cols);
 
                   //  if($option === "jso")
                     {
-                        $this->createJSO($table_object);
+                     //   $this->createJSO($table_object);
                     }
                   //  else if($option === "ci_model")
                     {
@@ -116,6 +175,12 @@ class metadatabase extends Controller{
                     {
                         $this->createCIView($table_object);
                     }
+
+                    {
+                       // $this->createCI_Language($table_object);
+                    }
+
+                    //$this->createMenu($table_object);
 
                     echo "<hr/>";
 				}
@@ -150,6 +215,16 @@ class metadatabase extends Controller{
 		$this->createJavaFile($table_object->table_name,$stringData);
 	}
 
+    	/**
+	 * @param $table
+	 * @return unknown_type
+	 */
+	function createMenu($table_object){
+		$metadata['object_name'] = $table_object->table_name;
+		$stringData = $this->load->view('template/gwt_menu_template', $metadata, true);
+		$this->appendJavaFile($table_object->table_name,$stringData);
+	}
+
     function createCIModel($table_object) {
         echo "<h3>Created CI Model: ".$table_object->table_name."</h3>";
 		$metadata['object_name'] = $table_object->table_name;
@@ -161,6 +236,7 @@ class metadatabase extends Controller{
     function createCIView($table_object) {
         echo "<h3>Created CI View: ".$table_object->table_name."</h3>";
 		$metadata['object_name'] = $table_object->table_name;
+        $metadata['object_fullname'] = $table_object->table_fullname;
 		$metadata['fields'] = $table_object->fields;
 		$stringData = $this->load->view('template/ci_view_template', $metadata, true);
 		$this->createPHPFile($table_object->table_name,$stringData,"view");
@@ -169,9 +245,23 @@ class metadatabase extends Controller{
     function createCIController($table_object) {
         echo "<h3>Created CI Controller: ".$table_object->table_name."</h3>";
 		$metadata['object_name'] = $table_object->table_name;
+        $metadata['object_fullname'] = $table_object->table_fullname;
 		$metadata['fields'] = $table_object->fields;
 		$stringData = $this->load->view('template/ci_controller_template', $metadata, true);
 		$this->createPHPFile($table_object->table_name,$stringData, "controllers");
+    }
+
+    function createCI_Language($table_object) {
+        echo "<h3>Created CI Language: ".$table_object->table_name."</h3>";
+		$metadata['object_name'] = $table_object->table_name;
+
+		$metadata['fields'] = $table_object->fields;
+		$stringData = $this->load->view('template/ci_language_template', $metadata, true);
+
+		$ourFileName = "system/application/language/lang.php";
+		$fh = fopen($ourFileName, 'a') or die("can't open file");
+		fwrite($fh, $stringData);
+		fclose($fh);
     }
 
 	/**
@@ -182,6 +272,18 @@ class metadatabase extends Controller{
 	function createJavaFile($filename,$stringData) {
 		$ourFileName = "javaORmapping/".$filename.".java";
 		$fh = fopen($ourFileName, 'w') or die("can't open file");
+		fwrite($fh, $stringData);
+		fclose($fh);
+	}
+
+    	/**
+	 * @param $filename
+	 * @param $stringData
+	 * @return unknown_type
+	 */
+	function appendJavaFile($filename,$stringData) {
+		$ourFileName = "javaORmapping/menu.java";
+		$fh = fopen($ourFileName, 'a') or die("can't open file");
 		fwrite($fh, $stringData);
 		fclose($fh);
 	}
@@ -242,6 +344,7 @@ class metadatabase extends Controller{
 
 class Table {
 	public $table_name ;
+    public $table_fullname ;
 	public $fields = array();
 	private $c = 0;
 
@@ -264,32 +367,115 @@ class Table {
 
 class TableField {
 	public $name ;
-	public $type ;
+    public $fullname ;
+	public $type ;// use to detect javascript object type in GWT 1.5
+    public $default = "";
     public $isKey = false;
+    public $isForeignKey = false;
+    public $isUnique = false;
     public $isAutoIncrement = false;
-    public $default;
+    public $isRequire = false;
 
-	function TableField($name,$type,$isKey ) {
-		$this->name = $name;
-		$this->type = $type;
+    public $maxLength = 0;
+    public $isString = false;
+    public $isNumber = false;
+    public $isDate = false;
+  
+    public function setIsKey($isKey) {
         $this->isKey = $isKey;
-	}
-    function TableField4($name,$type,$isKey,$isAutoIncrement ) {
-		$this->name = $name;
-		$this->type = $type;
-        $this->isKey = $isKey;
+        $this->isRequire = true;
+    } 
+    public function setIsForeignKey($isForeignKey) {
+        $this->isForeignKey = $isForeignKey;
+    }  
+    public function setIsUnique($isUnique) {
+        $this->isUnique = $isUnique;
+        $this->isRequire = true;
+    }
+    public function setIsAutoIncrement($isAutoIncrement) {
         $this->isAutoIncrement = $isAutoIncrement;
-	}
-    function TableField5($name,$type,$isKey,$isAutoIncrement,$default ) {
-		$this->name = $name;
-		$this->type = $type;
-        $this->isKey = $isKey;
-        $this->isAutoIncrement = $isAutoIncrement;
-        $this->default = $default;
-	}
+    }
+
+    public function setIsRequire($isRequire) {
+        $this->isRequire = $isRequire;
+    }
+    public function setMaxLength($maxLength) {
+        $this->maxLength = $maxLength;
+    }
+
 }
 
 class DBUtils {
+    public static function StringLength($mysqlType)
+    {
+        $start = strpos($mysqlType, "(");
+        $end = strpos($mysqlType, ")");
+
+        switch ($mysqlType) {
+			case "char": case "varchar": case "longvarchar": case "text":
+				{
+					$s = substr($mysqlType,$start,$end);
+                    if(is_int($s))
+                        return $s + 0;
+				}
+            default:
+				break;
+        }
+        return 0;
+    }
+
+    public static function isNumber($mysqlType)
+    {
+        //we got bigint(20),so trip it to bigint
+		$pos = strpos($mysqlType, "(");
+		if($pos > 0)
+		$mysqlType = substr($mysqlType,0,$pos);
+		switch ($mysqlType) {
+			case "tinyint":	case "int": case "integer":	case "bigint": case "real": case "float": case "double":
+				{
+					return true;
+				}
+			default:
+				break;
+		}
+        return false;
+    }
+
+    public static function isString($mysqlType)
+    {
+        //we got bigint(20),so trip it to bigint
+		$pos = strpos($mysqlType, "(");
+		if($pos > 0)
+		$mysqlType = substr($mysqlType,0,$pos);
+		switch ($mysqlType) {
+			case "char": case "varchar": case "longvarchar": case "text":
+				{
+					return true;
+				}
+			default:
+				break;
+		}
+        return false;
+    }
+
+    //TODO: is this enough ??
+    public static function isDate($mysqlType)
+    {
+        //we got bigint(20),so trip it to bigint
+		$pos = strpos($mysqlType, "(");
+		if($pos > 0)
+		$mysqlType = substr($mysqlType,0,$pos);
+		switch ($mysqlType) {
+			case "date": case "datetime":
+				{
+					return true;
+				}
+			default:
+				break;
+		}
+        return false;
+    }
+
 	public static function MySQLTypeMapping2Java($mysqlType) {
 		//we got bigint(20),so trip it to bigint
 		$pos = strpos($mysqlType, "(");

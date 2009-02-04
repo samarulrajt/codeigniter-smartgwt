@@ -1,5 +1,15 @@
 <?php echo "<?php"?>
 
+/**
+* @property CI_Loader $load
+* @property CI_Form_validation $form_validation
+* @property CI_Input $input
+* @property CI_Email $email
+* @property CI_DB_active_record $db
+* @property CI_DB_forge $dbforge
+* @property VehicleDBUtils $VehicleDBUtils
+*/ 
+
 class <?=ucwords($object_name)?>_c extends Controller
 {
     //message in vietnamese, TODO: add I18N later
@@ -10,6 +20,8 @@ class <?=ucwords($object_name)?>_c extends Controller
     {
          parent::Controller();
          $this->load->model('<?=$object_name?>');
+         $this->load->model('VehicleDBUtils');
+
          $this->load->helper('form');
          $this->load->helper('object2array');
          $this->load->library('form_validation');
@@ -26,15 +38,26 @@ class <?=ucwords($object_name)?>_c extends Controller
 
         $inputmask_script = "";
         <?php foreach($fields as $field):?>
-           $form = $form . "<label><span><?=$field->name?></span>\n";
+           $form = $form . "<label><span><?=$field->fullname?></span>\n";
 
            $the_field = new stdClass();
            $the_field->name = "<?=$field->name?>";          
-           $the_field->value = "";
+           $the_field->value = "<?=$field->default?>";
            $the_field->id = "<?=$field->name?>";
 
            //add class for validation here
-           $the_field->class = "input-text required number";
+           $the_field->class = "input-text";
+           
+           <?php
+                if($field->isRequire){
+                    echo ("\$the_field->class = \$the_field->class . ' required';\n ");
+                }
+                if($field->isNumber){
+                    echo ("\$the_field->class = \$the_field->class . ' number'; ");
+                }
+           ?>
+
+
            $the_field->onchange = "<?=ucwords($object_name)?>.setData(this.name,this.value);";
           
            $form = $form . form_input(parseObjectToArray($the_field))."\n";;
@@ -42,7 +65,7 @@ class <?=ucwords($object_name)?>_c extends Controller
            $form = $form . "</label>". "\n";
 
            //add input mask here
-           $inputmask_script = $inputmask_script . "$('#<?=$field->name?>').mask('99/99/9999');";
+
         <?php endforeach;?>
         
         //$form = $form . form_fieldset_close();

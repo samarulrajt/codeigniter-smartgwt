@@ -16,8 +16,8 @@
         <script type="text/javascript" src="<?php echo base_url()?>resources/jquery-1.3.1.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/jquery.ui.all.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/jqGrid/jquery.jqGrid.js"></script>
-        
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/inlinebox.js"></script>        
+
+        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/inlinebox.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.validate.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.maskedinput-1.2.1.pack.js"></script>
 
@@ -26,23 +26,32 @@
         <script  type="text/javascript">
             var <?=ucwords($object_name)?> = {};
 
-    <?=ucwords($object_name)?>.data = {};
-    <?=ucwords($object_name)?>.setData = function(fieldName,fieldValue)
-        {
-    <?=ucwords($object_name)?>.data[fieldName] = fieldValue;
-        }
+<?=ucwords($object_name)?>.data = {};
+<?=ucwords($object_name)?>.setDataField = function(fieldName,fieldValue)
+    {
+        <?=ucwords($object_name)?>.data[fieldName] = fieldValue;
+    }
 
-    <?=ucwords($object_name)?>.getData = function()
+ <?=ucwords($object_name)?>.setData = function(data)
+    {
+        jQuery.each(data, function(name, value) {
+           <?=ucwords($object_name)?>.data[name] = value;
+            $('#main_form [name='+ name +']').val( value );
+        });
+    }
+
+
+<?=ucwords($object_name)?>.getData = function()
     {
         var arr = $('#main_form').serializeArray();
         for(var e in arr)  {
-    <?=ucwords($object_name)?>.data[arr[e].name] = arr[e].value;
+        <?=ucwords($object_name)?>.data[arr[e].name] = arr[e].value;
         }
         return <?=ucwords($object_name)?>.data;
     }
 
     //create
-    <?=ucwords($object_name)?>.Create = function()
+<?=ucwords($object_name)?>.Create = function()
     {
         if(!$("#main_form").valid())
             return;
@@ -58,7 +67,7 @@
     }
 
     //refresh grid
-    <?=ucwords($object_name)?>.Read = function()
+<?=ucwords($object_name)?>.Read = function()
     {
         InlineBox.showAjaxLoader();
         jQuery.post("<?php echo site_url("$object_name")?>_c/read_json_format", {},
@@ -69,9 +78,9 @@
     }
 
     //update
-    <?=ucwords($object_name)?>.Update = function()
+<?=ucwords($object_name)?>.Update = function()
     {
-       if(!$("#main_form").valid())
+        if(!$("#main_form").valid())
             return;
 
         InlineBox.showAjaxLoader();
@@ -85,7 +94,7 @@
 
 
     //delete
-    <?=ucwords($object_name)?>.Delete = function()
+<?=ucwords($object_name)?>.Delete = function()
     {
         if(!$("#main_form").valid())
             return;
@@ -98,18 +107,22 @@
         });
     }
 
-    <?=ucwords($object_name)?>.currentRowID = null;
+<?=ucwords($object_name)?>.currentRowID = null;
 
-    <?=ucwords($object_name)?>.setSelectedRow = function(id)
+<?=ucwords($object_name)?>.setSelectedRow = function(id)
     {
-    <?=ucwords($object_name)?>.currentRowID = id;
+        <?=ucwords($object_name)?>.currentRowID = id;
     }
 
     var inputDate = {};
-    $(function() {
-    <?php foreach($fields as $field):?>
-    // inputDate['<?=$field->name?>'] = $("#<?=$field->name?>").datepicker({dateFormat:"dd/mm/yy"});
-    <?php endforeach;?>
+    $( function() {
+<?php foreach($fields as $field):?>
+<?php if($field->isDate): ?>
+        inputDate['<?=$field->name?>'] = $("#<?=$field->name?>").datepicker({dateFormat:"yy/mm/dd"});
+        $('#<?=$field->name?>').mask('9999/99/99');
+        $('#<?=$field->name?>').validate({rules:{ require: true, date: true}});
+<?php endif; ?>
+<?php endforeach;?>
     });
         </script>
     </head>
@@ -119,9 +132,20 @@
 
         <div style="width: 930px;">
             <div class="box">
-                <h1> <?=ucwords($object_name)?> </h1>
+                <h1> <?=ucwords($object_fullname)?> </h1>
                 <hr>
-                <?php echo("<?=\$form_view ?>"); ?>
+
+                <form method="POST" id="main_form" >
+                    <?php foreach($fields as $field):?>
+                    <?php //if(!$field->isAutoIncrement): ?>
+                    <label>
+                        <span><?=$field->fullname?></span>
+                        <input type="text" name="<?=$field->name?>" value="<?=$field->default?>" id="<?=$field->name?>" class="input-text" onchange="<?=ucwords($object_name)?>.setDataField(this.name,this.value);"  />
+                    </label>
+                    <?php //endif;?>
+                    <?php endforeach;?>
+                </form>
+
                 <div class="spacer" id="form_control" >
                     <a href="javascript:void(0)" onclick="<?=ucwords($object_name)?>.Create()" class="green">Thêm</a>
                     <a href="javascript:void(0)" onclick="<?=ucwords($object_name)?>.Update()" class="green">Cập nhập</a>
@@ -148,43 +172,47 @@
         var colModelT = new Array();
         var gridimgpath = '<?php echo base_url()?>resources/jqGrid/themes/basic/images';
 
-        <?php foreach($fields as $field):?>
-        colNamesT.push('<?=$field->name?>');
-        colModelT.push({name:'<?=$field->name?>',index:'<?=$field->name?>', editable: false});
-        <?php endforeach;?>
+<?php foreach($fields as $field):?>
+    colNamesT.push('<?=$field->name?>');
+    colModelT.push({name:'<?=$field->name?>',index:'<?=$field->name?>', editable: false});
+<?php endforeach;?>
 
-        var loadView = function()
+    var loadView = function()
+    {
+        jGrid = jQuery("#list2").jqGrid(
         {
-            jGrid = jQuery("#list2").jqGrid(
-            {
-                url:'<?php echo site_url("$object_name")?>_c/read_json_format',
-                mtype : "POST",
-                datatype: "json",
-                colNames: colNamesT ,
-                colModel: colModelT ,
-                rowNum:10,
-                height: 270,
-                rowList:[10,20,30],
-                imgpath: gridimgpath,
-                pager: jQuery('#pager2'),
-                sortname: colNamesT[0],
-                viewrecords: true,
-                caption:"<?=ucwords($object_name)?>"
-            });
-            jGrid.navGrid('#pager2',{edit:false,add:false,del:false, search: false, refresh: true});
-            $("#alertmod").remove();//FIXME
-        }
-        jQuery("#list2").ready(loadView);
+            url:'<?php echo site_url("$object_name")?>_c/read_json_format',
+            mtype : "POST",
+            datatype: "json",
+            colNames: colNamesT ,
+            colModel: colModelT ,
+            rowNum:10,
+            height: 270,
+            rowList:[10,20,30],
+            imgpath: gridimgpath,
+            pager: jQuery('#pager2'),
+            sortname: colNamesT[0],
+            viewrecords: true,
+            caption:"<?=$object_fullname?>",
+            onSelectRow: function(){
+                var id = jQuery("#list2").getGridParam('selrow');
+                 <?=ucwords($object_name)?>.setData(jQuery("#list2").getRowData(id));
+            }
+        });
+        jGrid.navGrid('#pager2',{edit:false,add:false,del:false, search: false, refresh: true});
+        $("#alertmod").remove();//FIXME
+    }
+    jQuery("#list2").ready(loadView);
 
 
-        var initForm = function(){
-            //init validation form
-            $("#main_form").validate();
+    var initForm = function(){
+        //init validation form
+        $("#main_form").validate();
 
-            //init input mask
-            
-        }
-        jQuery("#main_form").ready(initForm);
+        //init input mask
+
+    }
+    jQuery("#main_form").ready(initForm);
 
     </script>
 

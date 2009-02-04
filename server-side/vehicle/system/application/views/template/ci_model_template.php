@@ -1,4 +1,11 @@
-<?php echo "<?php"?>
+<?php echo "<?php" ?>
+
+/**
+* @property CI_Loader $load
+* @property CI_Input $input
+* @property CI_DB_active_record $db
+* @property CI_DB_forge $dbforge
+*/ 
 
 class <?=ucwords($object_name)?> extends Model {
 

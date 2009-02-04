@@ -6,25 +6,19 @@
 * @property CI_DB_forge $dbforge
 */ 
 
-class Sys_sessions extends Model {
+class Metadata extends Model {
 
-      //Type: String
-    var $username = '';
-
-	  //Type: String
-    var $session_id = '';
+      //Type: Integer
+    var $id = '';
 
 	  //Type: String
-    var $ip_address = '';
+    var $tablename = '';
 
-	  //Type: String
-    var $user_agent = '';
-
-	  //Type: Long
-    var $last_activity = '';
+	  //Type: Byte
+    var $use_scaffolding = '';
 
 	
-    function Sys_sessions()
+    function Metadata()
     {
         parent::Model();
     }
@@ -32,34 +26,26 @@ class Sys_sessions extends Model {
     function read()
     {
         // BEGIN FILTER CRITERIA CHECK
-        // If any of the following properties are set before Sys_sessions->get() is called from the controller then we will include
+        // If any of the following properties are set before Metadata->get() is called from the controller then we will include
         // a where statement for each of the properties that have been set.
 
-                if ($this->username)
+                if ($this->id)
         {
-            $this->db->where("username", $this->username);
+            $this->db->where("id", $this->id);
         }
-                if ($this->session_id)
+                if ($this->tablename)
         {
-            $this->db->where("session_id", $this->session_id);
+            $this->db->where("tablename", $this->tablename);
         }
-                if ($this->ip_address)
+                if ($this->use_scaffolding)
         {
-            $this->db->where("ip_address", $this->ip_address);
-        }
-                if ($this->user_agent)
-        {
-            $this->db->where("user_agent", $this->user_agent);
-        }
-                if ($this->last_activity)
-        {
-            $this->db->where("last_activity", $this->last_activity);
+            $this->db->where("use_scaffolding", $this->use_scaffolding);
         }
         
         // END FILTER CRITERIA CHECK
 
         // This will execute the query and collect the results and other properties of the query into an object.
-        $query = $this->db->get("sys_sessions");
+        $query = $this->db->get("metadata");
 
         return $query->result();
     }
@@ -74,7 +60,7 @@ class Sys_sessions extends Model {
         $sord = $this->input->post('sord');
 
         if(!$sidx) $sidx =1;
-        $count = $this->db->count_all('sys_sessions');
+        $count = $this->db->count_all('metadata');
 
         if( $count >0 ) {
             $total_pages = ceil($count/$limit);
@@ -87,17 +73,15 @@ class Sys_sessions extends Model {
 
         $this->db->limit($limit, $start);
         $this->db->order_by("$sidx", "$sord");
-        $objects = $this->db->get("sys_sessions")->result();
+        $objects = $this->db->get("metadata")->result();
         $rows =  array();
 
         foreach($objects as $obj)
         {
             $cell = array();
-                            array_push($cell, $obj->username);
-                            array_push($cell, $obj->session_id);
-                            array_push($cell, $obj->ip_address);
-                            array_push($cell, $obj->user_agent);
-                            array_push($cell, $obj->last_activity);
+                            array_push($cell, $obj->id);
+                            array_push($cell, $obj->tablename);
+                            array_push($cell, $obj->use_scaffolding);
                         $row = new stdClass();
             $row->id = $cell[0];
             $row->cell = $cell;
@@ -119,20 +103,18 @@ class Sys_sessions extends Model {
     {
         // When we insert or update a record in CodeIgniter, we pass the results as an array:
         $db_array = array(
-                    "session_id" => $this->session_id,
-                    "ip_address" => $this->ip_address,
-                    "user_agent" => $this->user_agent,
-                    "last_activity" => $this->last_activity,
+                    "tablename" => $this->tablename,
+                    "use_scaffolding" => $this->use_scaffolding,
           );
 
       $saveSuccess = false;
 
          // If key was set in the controller, then we will update an existing record.
-        if ($this->username)
+        if ($this->id)
         {
             $this->db->trans_start();
-            $this->db->where("username", $this->username);
-            $this->db->update("sys_sessions", $db_array);
+            $this->db->where("id", $this->id);
+            $this->db->update("metadata", $db_array);
             if($this->db->affected_rows() > 0) {
                 $saveSuccess = true;
             }
@@ -145,7 +127,7 @@ class Sys_sessions extends Model {
         else
         {
             $this->db->trans_start();
-            $this->db->insert("sys_sessions", $db_array);
+            $this->db->insert("metadata", $db_array);
             if($this->db->affected_rows() > 0) {
                 $saveSuccess = true;
             }
@@ -154,7 +136,7 @@ class Sys_sessions extends Model {
             }
             $this->db->trans_complete();
         }
-     
+   
         return $saveSuccess;
     }
 
@@ -162,10 +144,10 @@ class Sys_sessions extends Model {
     function delete()
     {
         $saveSuccess = false;
-         // As long as sys_sessions->username was set in the controller, we will delete the record.
-        if ($this->username) {
-            $this->db->where("username", $this->username);
-            $this->db->delete("sys_sessions");
+         // As long as metadata->id was set in the controller, we will delete the record.
+        if ($this->id) {
+            $this->db->where("id", $this->id);
+            $this->db->delete("metadata");
             if($this->db->affected_rows() > 0) {
                 $saveSuccess = true;
             }
@@ -173,7 +155,7 @@ class Sys_sessions extends Model {
                 $saveSuccess = false;
             }
         }
-             return $saveSuccess;
+           return $saveSuccess;
     }
 }
 
