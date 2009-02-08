@@ -17,11 +17,13 @@
         <script type="text/javascript" src="http://localhost/vehicle/resources/jquery.ui.all.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/jqGrid/jquery.jqGrid.js"></script>
 
+        <!--  Utils for Page -->
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/inlinebox.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.validate.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.maskedinput-1.2.1.pack.js"></script>
-
-
+        <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.form.js"></script>
+        <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.field.min.js"></script>
+        <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.autocomplete.js"></script>
 
         <script  type="text/javascript">
             var Metadata = {};
@@ -36,17 +38,21 @@ Metadata.setDataField = function(fieldName,fieldValue)
     {
         jQuery.each(data, function(name, value) {
            Metadata.data[name] = value;
-            $('#main_form [name='+ name +']').val( value );
+            $("#main_form input[name="+ name +"]").setValue(value);
         });
     }
 
 
 Metadata.getData = function()
     {
-        var arr = $('#main_form').serializeArray();
-        for(var e in arr)  {
-        Metadata.data[arr[e].name] = arr[e].value;
-        }
+        var obj = {};
+        $.each( $("#main_form").formSerialize().split("&"), function(i,n)
+                        {
+                            var toks = n.split("=");
+                            obj[toks[0]] = toks[1];
+                        }
+        );        
+        Metadata.data = obj;
         return Metadata.data;
     }
 
@@ -56,7 +62,7 @@ Metadata.Create = function()
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("http://localhost/vehicle/index.php/metadata_c/create", Metadata.getData() ,
+        jQuery.post("http://localhost/vehicle/index.php/c_metadata/create", Metadata.getData() ,
         function(message){
             if(message != null){
                 InlineBox.hideAjaxLoader();
@@ -70,7 +76,7 @@ Metadata.Create = function()
 Metadata.Read = function()
     {
         InlineBox.showAjaxLoader();
-        jQuery.post("http://localhost/vehicle/index.php/metadata_c/read_json_format", {},
+        jQuery.post("http://localhost/vehicle/index.php/c_metadata/read_json_format", {},
         function(data){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -84,7 +90,7 @@ Metadata.Update = function()
             return;
 
         InlineBox.showAjaxLoader();
-        jQuery.post("http://localhost/vehicle/index.php/metadata_c/update", Metadata.getData() ,
+        jQuery.post("http://localhost/vehicle/index.php/c_metadata/update", Metadata.getData() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -99,7 +105,7 @@ Metadata.Delete = function()
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("http://localhost/vehicle/index.php/metadata_c/delete",Metadata.getData() ,
+        jQuery.post("http://localhost/vehicle/index.php/c_metadata/delete",Metadata.getData() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -120,27 +126,29 @@ Metadata.setSelectedRow = function(id)
         </script>
     </head>
 
-    <body>
-        <?php echo validation_errors(); ?>
+    <body>  
         <div style="width: 930px;">
             <div class="box">
                 <h1> Metadata </h1>
                 <hr>
 
-                <form method="POST" id="main_form" >
-                                                            <label>
+                <form method="POST" id="main_form" action="http://localhost/vehicle/index.php/c_metadata/">
+                                        
+                    <label>
                         <span>id</span>
                         <input type="text" name="id" value="" id="id" class="input-text" onchange="Metadata.setDataField(this.name,this.value);"  />
-                    </label>
-                                                                                <label>
+                    </label>                    
+                                        
+                    <label>
                         <span>tablename</span>
                         <input type="text" name="tablename" value="" id="tablename" class="input-text" onchange="Metadata.setDataField(this.name,this.value);"  />
-                    </label>
-                                                                                <label>
+                    </label>                    
+                                        
+                    <label>
                         <span>use_scaffolding</span>
                         <input type="text" name="use_scaffolding" value="" id="use_scaffolding" class="input-text" onchange="Metadata.setDataField(this.name,this.value);"  />
-                    </label>
-                                                        </form>
+                    </label>                    
+                                    </form>
 
                 <div class="spacer" id="form_control" >
                     <a href="javascript:void(0)" onclick="Metadata.Create()" class="green">Thêm</a>
@@ -179,7 +187,7 @@ Metadata.setSelectedRow = function(id)
     {
         jGrid = jQuery("#list2").jqGrid(
         {
-            url:'http://localhost/vehicle/index.php/metadata_c/read_json_format',
+            url:'http://localhost/vehicle/index.php/c_metadata/read_json_format',
             mtype : "POST",
             datatype: "json",
             colNames: colNamesT ,

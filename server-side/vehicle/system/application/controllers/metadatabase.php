@@ -67,6 +67,17 @@ class metadatabase extends Controller{
         return false;
     }
 
+     function isInMetadata($tablename) {
+        if(isset ($tablename))  {
+            $this->metadata->tablename = $tablename;
+            $rows = $this->metadata->read();
+             if(sizeof($rows)>0) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     //the power of my solution is here
     function gwt_igniter($option)
     {
@@ -92,15 +103,19 @@ class metadatabase extends Controller{
             while($row = mysql_fetch_array($result))
             {
                 $tableName = $row[0];
-                if($tableName== "metadata3" ){//&& $this->use_scaffolding($tableName) || ) {
-                    echo $tableName." <b>skiped</b><br>";
+                if( $tableName== "metadata"  ) {
+                    echo $tableName." <b>Skipped</b><br>";
                     continue;
                 }
-//                else {
-//                    $this->metadata->tablename = $tableName;
-//                    $this->metadata->use_scaffolding = 0;
-//                    $this->metadata->save();
-//                }
+                else if(!$this->isInMetadata($tableName) && $option == "o") {
+                    $this->metadata->tablename = $tableName;
+                    $this->metadata->use_scaffolding = 0;
+                    $this->metadata->save();
+                }
+                else if(!$this->use_scaffolding($tableName)){
+                    echo $tableName." <b>Skipped</b><br>";
+                    continue;
+                }
 
                 $table_object = new Table($tableName);//create table object
                 if($this->lang->line($tableName)) {
