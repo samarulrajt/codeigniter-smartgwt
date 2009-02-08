@@ -107,7 +107,7 @@ class metadatabase extends Controller{
                     echo $tableName." <b>Skipped</b><br>";
                     continue;
                 }
-                else if(!$this->isInMetadata($tableName) && $option == "o") {
+                else if(!$this->isInMetadata($tableName) && $option == "create") {
                     $this->metadata->tablename = $tableName;
                     $this->metadata->use_scaffolding = 0;
                     $this->metadata->save();
