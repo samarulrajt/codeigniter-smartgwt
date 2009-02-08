@@ -17,11 +17,13 @@
         <script type="text/javascript" src="<?php echo base_url()?>resources/jquery.ui.all.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/jqGrid/jquery.jqGrid.js"></script>
 
+        <!--  Utils for Page -->
         <script type="text/javascript" src="<?php echo base_url()?>resources/utils/inlinebox.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.validate.js"></script>
         <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.maskedinput-1.2.1.pack.js"></script>
-
-
+        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.form.js"></script>
+        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.field.min.js"></script>
+        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.autocomplete.js"></script>
 
         <script  type="text/javascript">
             var <?=ucwords($object_name)?> = {};
@@ -36,17 +38,21 @@
     {
         jQuery.each(data, function(name, value) {
            <?=ucwords($object_name)?>.data[name] = value;
-            $('#main_form [name='+ name +']').val( value );
+            $("#main_form input[name="+ name +"]").setValue(value);
         });
     }
 
 
 <?=ucwords($object_name)?>.getData = function()
     {
-        var arr = $('#main_form').serializeArray();
-        for(var e in arr)  {
-        <?=ucwords($object_name)?>.data[arr[e].name] = arr[e].value;
-        }
+        var obj = {};
+        $.each( $("#main_form").formSerialize().split("&"), function(i,n)
+                        {
+                            var toks = n.split("=");
+                            obj[toks[0]] = toks[1];
+                        }
+        );        
+        <?=ucwords($object_name)?>.data = obj;
         return <?=ucwords($object_name)?>.data;
     }
 
@@ -56,7 +62,7 @@
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("$object_name")?>_c/create", <?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/create", <?=ucwords($object_name)?>.getData() ,
         function(message){
             if(message != null){
                 InlineBox.hideAjaxLoader();
@@ -70,7 +76,7 @@
 <?=ucwords($object_name)?>.Read = function()
     {
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("$object_name")?>_c/read_json_format", {},
+        jQuery.post("<?php echo site_url("c_$object_name")?>/read_json_format", {},
         function(data){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -84,7 +90,7 @@
             return;
 
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("$object_name")?>_c/update", <?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/update", <?=ucwords($object_name)?>.getData() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -99,7 +105,7 @@
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("$object_name")?>_c/delete",<?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/delete",<?=ucwords($object_name)?>.getData() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -127,22 +133,18 @@
         </script>
     </head>
 
-    <body>
-        <?php echo("<?php echo validation_errors(); ?>") ?>
-
+    <body>  
         <div style="width: 930px;">
             <div class="box">
                 <h1> <?=ucwords($object_fullname)?> </h1>
                 <hr>
 
-                <form method="POST" id="main_form" >
-                    <?php foreach($fields as $field):?>
-                    <?php //if(!$field->isAutoIncrement): ?>
+                <form method="POST" id="main_form" action="<?php echo site_url("c_$object_name")?>/">
+                    <?php foreach($fields as $field):?>                    
                     <label>
                         <span><?=$field->fullname?></span>
                         <input type="text" name="<?=$field->name?>" value="<?=$field->default?>" id="<?=$field->name?>" class="input-text" onchange="<?=ucwords($object_name)?>.setDataField(this.name,this.value);"  />
-                    </label>
-                    <?php //endif;?>
+                    </label>                    
                     <?php endforeach;?>
                 </form>
 
@@ -181,7 +183,7 @@
     {
         jGrid = jQuery("#list2").jqGrid(
         {
-            url:'<?php echo site_url("$object_name")?>_c/read_json_format',
+            url:'<?php echo site_url("c_$object_name")?>/read_json_format',
             mtype : "POST",
             datatype: "json",
             colNames: colNamesT ,
