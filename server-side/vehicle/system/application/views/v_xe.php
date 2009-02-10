@@ -1,7 +1,7 @@
 <html>
     <head>
         <base href="http://localhost/vehicle/">
-        <title>Tracking Vehicle</title>
+        <title>Xe</title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/jqGrid/themes/basic/grid.css" />
@@ -25,7 +25,6 @@
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.field.min.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.autocomplete.js"></script>
 
-        <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;key=ABQIAAAARCn-s2Rb8Qeo5T853_i8KhTPJQkavyWDxmYjA5lpKmshS0aD2hRdWozSifvfBxQ5FL5NdfrRlth89w" />
         <script  type="text/javascript">
             var Xe = {};
 
@@ -39,18 +38,24 @@
             {
                 jQuery.each(data, function(name, value) {
                     Xe.data[name] = value;
-                    $("#main_form input[name="+ name +"]").setValue(value);
+                    if(name == 'MS_MODEL_XE'){
+                        $("#main_form select[name='MS_MODEL_XE']").setValue(value);
+                    }
+                    else{
+                        $("#main_form input[name="+ name +"]").setValue(value);
+                    }
+
                 });
             }
 
 
+            //FIXME
             Xe.getData = function()
             {
                 var obj = {};
-                $.each( $("#main_form").formSerialize().split("&"), function(i,n)
+                $.each(  $("#main_form").formToArray() , function(i,o)
                 {
-                    var toks = n.split("=");
-                    obj[toks[0]] = toks[1];
+                    obj[o.name] = o.value;
                 }
             );
                 Xe.data = obj;
@@ -63,7 +68,7 @@
                 if(!$("#main_form").valid())
                     return;
                 InlineBox.showAjaxLoader();
-                jQuery.post("http://localhost/vehicle/index.php/c_xe/create", Xe.getData() ,
+                jQuery.post("http://localhost/vehicle/index.php/c_xe/create",  $("#main_form").formToArray() ,
                 function(message){
                     if(message != null){
                         InlineBox.hideAjaxLoader();
@@ -91,7 +96,7 @@
                     return;
 
                 InlineBox.showAjaxLoader();
-                jQuery.post("http://localhost/vehicle/index.php/c_xe/update", Xe.getData() ,
+                jQuery.post("http://localhost/vehicle/index.php/c_xe/update",  $("#main_form").formToArray() ,
                 function(message){
                     InlineBox.hideAjaxLoader();
                     $("#list2").trigger("reloadGrid");
@@ -103,10 +108,8 @@
             //delete
             Xe.Delete = function()
             {
-                if(!$("#main_form").valid())
-                    return;
                 InlineBox.showAjaxLoader();
-                jQuery.post("http://localhost/vehicle/index.php/c_xe/delete",Xe.getData() ,
+                jQuery.post("http://localhost/vehicle/index.php/c_xe/delete",$("#main_form").formToArray() ,
                 function(message){
                     InlineBox.hideAjaxLoader();
                     $("#list2").trigger("reloadGrid");
@@ -127,20 +130,10 @@
                 $('#NGAY_CAP_NHAT').mask('9999/99/99');
                 $('#NGAY_CAP_NHAT').validate({rules:{ require: true, date: true}});
             });
-
-
-
         </script>
     </head>
 
     <body>
-
-        <div id="map_canvas" style="width: 650px; height: 480px">
-
-        </div>
-
-        <br>
-
         <div style="width: 930px;">
             <div class="box">
                 <h1> Xe </h1>
@@ -148,24 +141,25 @@
 
                 <form method="POST" id="main_form" action="http://localhost/vehicle/index.php/c_xe/">
 
-                    <label>
+                    <label style="display:none" >
                         <span>STT xe</span>
-                        <input type="text" name="STT_XE" value="" id="STT_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
+                        <input type="text" name="STT_XE" value="" id="STT_XE" class="input-text " onchange="Xe.setDataField(this.name,this.value);"  />
                     </label>
 
                     <label>
-                        <span>Số ĐK</span>
-                        <input type="text" name="SO_DANG_KY_XE" value="" id="SO_DANG_KY_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
+                        <span>Số Đăng ký xe</span>
+                        <input type="text" name="SO_DANG_KY_XE" value="" id="SO_DANG_KY_XE" class="input-text required" onchange="Xe.setDataField(this.name,this.value);"  />
                     </label>
 
                     <label>
-                        <span>Số model xe</span>
-                        <input type="text" name="MS_MODEL_XE" value="" id="MS_MODEL_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
+                        <span>Model xe</span>
+                        <?=$model_xe_list ?>
                     </label>
+
 
                     <label>
                         <span>MS Thiết bị</span>
-                        <input type="text" name="MS_THIET_BI" value="" id="MS_THIET_BI" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
+                        <input type="text" name="MS_THIET_BI" value="" id="MS_THIET_BI" class="input-text " onchange="Xe.setDataField(this.name,this.value);"  />
                     </label>
 
                     <label>
@@ -175,8 +169,70 @@
 
                     <label>
                         <span>Ngày cập nhật</span>
-                        <input type="text" name="NGAY_CAP_NHAT" value="" id="NGAY_CAP_NHAT" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
+                        <input type="text" name="NGAY_CAP_NHAT" value="" id="NGAY_CAP_NHAT" class="input-text required" onchange="Xe.setDataField(this.name,this.value);"  />
                     </label>
+
+                    <hr>
+
+                    <fieldset>
+                        <legend>Thông tin chi tiết</legend>
+
+                        <div style="width:48%;display:inline">
+                            <label>
+                                <span>Loại model</span>
+                                <input type="text" name="LOAI_MODEL" value="" id="LOAI_MODEL" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>Nhãn hiệu</span>
+                                <input type="text" name="NHAN_HIEU" value="" id="NHAN_HIEU" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>MS Thuế</span>
+                                <input type="text" name="MS_THUE" value="" id="MS_THUE" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+
+                            <label>
+                                <span>Loai xe</span>
+                                <input type="text" name="GENRE" value="" id="GENRE" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>Số sườn</span>
+                                <input type="text" name="SO_SUON" value="" id="SO_SUON" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+                        </div>
+
+                        <div style="width:48%;display:inline">
+                            <label>
+                                <span>Nhiên liệu</span>
+                                <input type="text" name="FUEL" value="" id="FUEL" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>PTAC</span>
+                                <input type="text" name="PTAC" value="" id="PTAC" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>Trọng tải</span>
+                                <input type="text" name="PAYLOAD" value="" id="PAYLOAD" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+                            <label>
+                                <span>Diện tích sàn</span>
+                                <input type="text" name="FLOOR_AREA" value="" id="FLOOR_AREA" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+
+
+                            <label>
+                                <span>KM đã đi</span>
+                                <input type="text" name="KM_METER_AVAILABLE" value="" id="KM_METER_AVAILABLE" class="input-text" onchange="Model_xe.setDataField(this.name,this.value);"  />
+                            </label>
+                        </div>
+                    </fieldset>
                 </form>
 
                 <div class="spacer" id="form_control" >
@@ -218,8 +274,6 @@
         colNamesT.push('NGAY_CAP_NHAT');
         colModelT.push({name:'NGAY_CAP_NHAT',index:'NGAY_CAP_NHAT', editable: false});
 
-
-
         var loadView = function()
         {
             jGrid = jQuery("#list2").jqGrid(
@@ -247,59 +301,20 @@
         }
         jQuery("#list2").ready(loadView);
 
+        var changeModelXeHandler = function(){
+             var h = $("#main_form select[name='MS_MODEL_XE']");
+             alert(h.val());
+        }
 
         var initForm = function(){
             //init validation form
             $("#main_form").validate();
 
             //init input mask
-
-            if (GBrowserIsCompatible()) {
-                var map = new GMap2(document.getElementById("map_canvas"));
-
-                map.setMapType(G_SATELLITE_MAP);
-               // map.addControl(new GLargeMapControl());
-                //map.addControl(new GMapTypeControl());
-               // map.addControl(new GScaleControl())
-                map.setCenter(new  GLatLng(10.75340,106.62900), 16, G_SATELLITE_MAP);
-
-                var img = "<img width='63' height='80' src='http://lh3.google.co.uk/image/dezfowler/RaaZ_qQiHwI/AAAAAAAAAAk/Awg1txBX0KA/s288/suave.jpg' />"
-                var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 1"+ img +"</span>";
-
-                GEvent.addListener(marker, "dragstart", function() {
-                     logLatLon();
-                });
-
-                GEvent.addListener(marker, "dragend", function() {
-                     logLatLon();
-                });
-
-                map.addOverlay(marker);
-                //map.openInfoWindow(point, text);
-            }
-
+            $("#SO_DANG_KY_XE").mask("**-**9999");
+            $("#main_form select[name='MS_MODEL_XE']").change(changeModelXeHandler);
         }
         jQuery("#main_form").ready(initForm);
-
-        var point = new GLatLng(10.75340,106.62900);
-        var marker = new GMarker(point, {draggable: true});
-
-        function logLatLon(){
-            if( console != null )
-                console.log( marker.getLatLng() );
-        }
-
-        function updateVehicleMarker() {
-            point = new GLatLng(10.75381,106.63014)
-            marker = new GMarker(point);
-            initForm();
-        }
-
-        function bounceInfoWindow() {
-            $("#vehicle_marker").effect("bounce", { times: 3,distance:25 }, 400);
-        }
-
-
 
     </script>
 

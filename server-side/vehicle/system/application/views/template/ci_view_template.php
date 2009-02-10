@@ -62,7 +62,7 @@
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/create", <?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/create", $("#main_form").formToArray() ,
         function(message){
             if(message != null){
                 InlineBox.hideAjaxLoader();
@@ -90,7 +90,7 @@
             return;
 
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/update", <?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/update", $("#main_form").formToArray() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -105,7 +105,7 @@
         if(!$("#main_form").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/delete",<?=ucwords($object_name)?>.getData() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/delete",$("#main_form").formToArray() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");

@@ -18,7 +18,7 @@ class VehicleDBUtils extends Model {
         $this->load->helper("form");
     }
 
-    function getModelVehicles()
+    function getform_dropdownMS_MODEL_XE()
     {
         $this->db->select("LOAI_MODEL");
         $this->db->select("MS_MODEL_XE");       
@@ -27,7 +27,8 @@ class VehicleDBUtils extends Model {
         foreach ($query->result() as $row) {
             $options[$row->MS_MODEL_XE] = $row->LOAI_MODEL;
         }
-        echo form_dropdown("MS_MODEL_XE", $options);
+        
+        return form_dropdown("MS_MODEL_XE", $options);
     }
 
  

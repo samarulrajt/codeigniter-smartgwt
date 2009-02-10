@@ -9,21 +9,18 @@
 * @property CI_DB_active_record $db
 * @property CI_DB_forge $dbforge
 * @property VehicleDBUtils $VehicleDBUtils
-* @property Xe $xe
-* @property Gps_markers $gps_markers
- */
+* @property Xe $xe*/ 
 
-class c_Vehicle_Tracking extends Controller
+class c_Xe extends Controller
 {
     //message in vietnamese, TODO: add I18N later
     var $messageSuccess = "Thành công";
     var $messageFail    = "Thất bại";
 
-    function c_Vehicle_Tracking()
+    function c_Xe()
     {
         parent::Controller();
         $this->load->model('xe');
-        $this->load->model('gps_markers');
         $this->load->model('VehicleDBUtils');
 
         $this->load->helper('form');
@@ -33,12 +30,13 @@ class c_Vehicle_Tracking extends Controller
 
     function index()
     {
-        $this->load->view('v_vehicle_tracking');
+        $data['model_xe_list'] = $this->VehicleDBUtils->getform_dropdownMS_MODEL_XE();
+        $this->load->view('v_xe',$data);
     }
 
     function readXe($priKey)
     {
-        if(isset($priKey) )
+        if(isset ($priKey))
         {
             $this->xe->STT_XE = $priKey;
             $this->xe->SO_DANG_KY_XE = $priKey;
@@ -62,60 +60,13 @@ class c_Vehicle_Tracking extends Controller
         $this->xe->MS_THIET_BI = $this->input->xss_clean($this->input->post('MS_THIET_BI'));
         $this->xe->THE_TICH_THAT = $this->input->xss_clean($this->input->post('THE_TICH_THAT'));
         $this->xe->NGAY_CAP_NHAT = $this->input->xss_clean($this->input->post('NGAY_CAP_NHAT'));
+        $this->xe->SO_DANG_KY_XE =  $this->input->xss_clean($this->input->post('SO_DANG_KY_XE'));
 
         if($this->xe->save())
         echo $this->messageSuccess;
         else
         echo $this->messageFail;
 
-    }
-
-    function recordGPS($STT_NKHT,$LAT,$LON,$TYPE) {
-        $this->gps_markers->STT_NKHT = $STT_NKHT;
-        $this->gps_markers->LAT = $LAT;
-        $this->gps_markers->LNG = $LON;
-        $this->gps_markers->TYPE = $TYPE;
-        $this->gps_markers->GPS_TIME = time();
-        $this->gps_markers->save();
-    }
-
-    function simulationGPS() {
-        $x1 = 106.629;
-        $y1 = 10.7534;
-
-        $x2 = 106.640553;
-        $y2 = 10.7509747;
-
-        $t1 = ($x2/$x1);
-        $q1 = ($y2/$y1);
-
-        // current time
-        echo "t1 = ". $t1;
-        echo "<br>";
-        echo "q1 = ". $q1;
-        echo "<br>";
-
-        $LAT = $x1;
-        $LON = $y1;
-
-        for($i= 0; $i < 5; $i++){
-            $LAT = $LAT * $t1;
-            $LON = $LON * $q1;
-            $this->recordGPS(1,$LAT,$LON,"test");
-
-            echo "LAT = ". $LAT;
-            echo "<br>";
-            echo "LON = ". $LON;
-            echo "<br>";
-
-           // sleep(2);
-        }
-
-        // sleep for 2 seconds
-        //sleep(2);
-
-        // wake up !
-        //echo date('h:i:s') . "\n";
     }
 
     function read()

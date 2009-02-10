@@ -72,9 +72,7 @@ class c_<?=ucwords($object_name)?> extends Controller
 
     function read()
     {
-        //$data['objects'] = $this-><?=$object_name?>->read();
-        $data['form_view'] = $this->get_form_view();
-        $this->load->view('v_<?=$object_name?>',$data);
+        $this->load->view('v_<?=$object_name?>');
     }
 
     function read_json_format()

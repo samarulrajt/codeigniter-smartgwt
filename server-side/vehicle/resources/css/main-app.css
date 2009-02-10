@@ -1,158 +1,176 @@
 /* 
-    Document   : main-app
-    Created on : Jan 30, 2009, 9:16:51 PM
-    Author     : Trieu Nguyen
-    Description:
-        Purpose of the stylesheet follows.
+Document   : main-app
+Created on : Jan 30, 2009, 9:16:51 PM
+Author     : Trieu Nguyen
+Description:
+Purpose of the stylesheet follows.
 */
 
 /* 
-   TODO customize this sample style
-   Syntax recommendation http://www.w3.org/TR/REC-CSS2/
+TODO customize this sample style
+Syntax recommendation http://www.w3.org/TR/REC-CSS2/
 */
 
 
 body{	font-family:"Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
-	font-size:12px;
-	color:#000000;
+    font-size:12px;
+    color:#000000;
 }
 a{color:#0033CC;}
 h1, h2, p, form{
-	border:0px;
-	margin:0px;
-	padding:0px;
+    border:0px;
+    margin:0px;
+    padding:0px;
 }
 
 input{	font-family:"Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvetica, sans-serif;
-	font-size:12px;
+    font-size:12px;
 }
 h2{	color:#666666;
-	margin-bottom:20px;
-	font-size:16px;
+    margin-bottom:20px;
+    font-size:16px;
 }
 
 div.main{
-	margin:30px auto;
-	width:340px;
-	}
+    margin:30px auto;
+    width:340px;
+}
 
 div.box{
-	border:solid 1px #c6cfe1;
-	background:#dfe4ee;
-	padding:10px;
-	color:#333333;
-	margin-bottom:20px;
+    border:solid 1px #c6cfe1;
+    background:#dfe4ee;
+    padding:10px;
+    color:#333333;
+    margin-bottom:20px;
 }
 div.box h1 {
-	font-size:14px;
-	color:#000000;
-	padding-bottom:4px;
+    font-size:14px;
+    color:#000000;
+    padding-bottom:4px;
 }
 div.box p{padding-bottom:14px;}
 
 div.box input .input-text{
-	border:1px solid #3b6e22;
-	color:#666666;
-	width:180px;
+    border:1px solid #3b6e22;
+    color:#666666;
+    width:180px;
 }
 
 div.box label{
-	display:block;
-	margin-bottom:10px;
-	color:#555555;
+    display:block;
+    margin-bottom:10px;
+    color:#555555;
+}
+
+br { clear: both; }
+div.box input { border: 1px solid black; margin-bottom: .5em;  }
+div.box select { border: 1px solid black; margin-bottom: .5em;  }
+div.box input.error { border: 1px solid red; }
+div.box label.error {
+    background: url('http://dev.jquery.com/view/trunk/plugins/validate/demo/images/unchecked.gif') no-repeat;
+    padding-left: 16px;
+    margin-left: .3em;
+    display:inline;
+}
+label.valid {
+    background: url('http://dev.jquery.com/view/trunk/plugins/validate/demo/images/checked.gif') no-repeat;
+    display: block;
+    width: 16px;
+    height: 16px;
+     display:inline;
 }
 
 div.box div label{
     display: inline-block;
-	margin-bottom:10px;
-	color:#555555;
+    margin-bottom:10px;
+    color:#555555;
 }
 
 div.box div label span{
-	float:left;
-	padding-right:6px;
+    float:left;
+    padding-right:6px;
     margin-left: 4px;
-	text-align:right;
-	font-weight:bold;
+    text-align:right;
+    font-weight:bold;
 }
 
 div.box label span{
-	display:block;
-	float:left;
-	padding-right:6px;
-	width:220px;
-	text-align:right;
-	font-weight:bold;
+    display:block;
+    float:left;
+    padding-right:6px;
+    width:220px;
+    text-align:right;
+    font-weight:bold;
 }
 .spacer{margin-left:80px;
-	margin-bottom:10px;
-	font-size:11px;
-	color:#555555;
+    margin-bottom:10px;
+    font-size:11px;
+    color:#555555;
 }
 .green{
-	background:url(img/green.gif);
-	padding:0px 6px;
-	border:1px solid #3b6e22;
-	height:24px;
-	line-height:24px;
-	color:#FFFFFF;
-	font-size:12px;
-	margin-right:10px;
-	display:inline-block;
-	text-decoration:none;
+    background:url(img/green.gif);
+    padding:0px 6px;
+    border:1px solid #3b6e22;
+    height:24px;
+    line-height:24px;
+    color:#FFFFFF;
+    font-size:12px;
+    margin-right:10px;
+    display:inline-block;
+    text-decoration:none;
 }
 
 /* ///////////////////
 //  Jquery.AutoComplete
- ////////////////// */
+////////////////// */
 
 .ac_results {
-	padding: 0px;
-	border: 1px solid black;
-	background-color: white;
-	overflow: hidden;
-	z-index: 99999;
+    padding: 0px;
+    border: 1px solid black;
+    background-color: white;
+    overflow: hidden;
+    z-index: 99999;
 }
 
 .ac_results ul {
-	width: 100%;
-	list-style-position: outside;
-	list-style: none;
-	padding: 0;
-	margin: 0;
+    width: 100%;
+    list-style-position: outside;
+    list-style: none;
+    padding: 0;
+    margin: 0;
 }
 
 .ac_results li {
-	margin: 0px;
-	padding: 2px 5px;
-	cursor: default;
-	display: block;
-	/*
-	if width will be 100% horizontal scrollbar will apear
-	when scroll mode will be used
-	*/
-	/*width: 100%;*/
-	font: menu;
-	font-size: 12px;
-	/*
-	it is very important, if line-height not setted or setted
-	in relative units scroll will be broken in firefox
-	*/
-	line-height: 16px;
-	overflow: hidden;
+    margin: 0px;
+    padding: 2px 5px;
+    cursor: default;
+    display: block;
+    /*
+    if width will be 100% horizontal scrollbar will apear
+    when scroll mode will be used
+    */
+    /*width: 100%;*/
+    font: menu;
+    font-size: 12px;
+    /*
+    it is very important, if line-height not setted or setted
+    in relative units scroll will be broken in firefox
+    */
+    line-height: 16px;
+    overflow: hidden;
 }
 
 .ac_loading {
-	background: white url('img/indicator.gif') right center no-repeat;
+    background: white url('img/indicator.gif') right center no-repeat;
 }
 
 .ac_odd {
-	background-color: #eee;
+    background-color: #eee;
 }
 
 .ac_over {
-	background-color: #0A246A;
-	color: white;
+    background-color: #0A246A;
+    color: white;
 }
 
 
