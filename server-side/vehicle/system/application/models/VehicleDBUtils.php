@@ -25,7 +25,7 @@ class VehicleDBUtils extends Model {
         $query = $this->db->get("model_xe");
         $options = array();
         foreach ($query->result() as $row) {
-            $options[$row->MS_MODEL_XE] = $row->LOAI_MODEL;
+            $options[$row->MS_MODEL_XE] = $row->LOAI_MODEL." - ".$row->MS_MODEL_XE;
         }
         
         return form_dropdown("MS_MODEL_XE", $options);

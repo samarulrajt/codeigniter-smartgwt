@@ -28,6 +28,8 @@ class Xe extends Model {
     //Type:
     var $NGAY_CAP_NHAT = '';
 
+    var $IMAGE_VEHICLE = "";
+
 
     function Xe()
     {
@@ -108,6 +110,7 @@ class Xe extends Model {
             array_push($cell, $obj->MS_THIET_BI);
             array_push($cell, $obj->THE_TICH_THAT);
             array_push($cell, $obj->NGAY_CAP_NHAT);
+            array_push($cell, $obj->IMAGE_VEHICLE);
             $row = new stdClass();
             $row->id = $cell[0];
             $row->cell = $cell;
@@ -133,7 +136,8 @@ class Xe extends Model {
                     "MS_MODEL_XE" => $this->MS_MODEL_XE,
                     "MS_THIET_BI" => $this->MS_THIET_BI,
                     "THE_TICH_THAT" => $this->THE_TICH_THAT,
-                    "NGAY_CAP_NHAT" => $this->NGAY_CAP_NHAT                    
+                    "NGAY_CAP_NHAT" => $this->NGAY_CAP_NHAT ,
+                    "IMAGE_VEHICLE" => $this->IMAGE_VEHICLE
         );
 
         $saveSuccess = false;

@@ -17,6 +17,12 @@ body{	font-family:"Lucida Sans Unicode", "Lucida Grande", Verdana, Arial, Helvet
     color:#000000;
 }
 a{color:#0033CC;}
+
+img {
+    max-height:150px;
+    max-width:150px;
+}
+
 h1, h2, p, form{
     border:0px;
     margin:0px;

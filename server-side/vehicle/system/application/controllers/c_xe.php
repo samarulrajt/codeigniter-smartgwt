@@ -61,6 +61,7 @@ class c_Xe extends Controller
         $this->xe->THE_TICH_THAT = $this->input->xss_clean($this->input->post('THE_TICH_THAT'));
         $this->xe->NGAY_CAP_NHAT = $this->input->xss_clean($this->input->post('NGAY_CAP_NHAT'));
         $this->xe->SO_DANG_KY_XE =  $this->input->xss_clean($this->input->post('SO_DANG_KY_XE'));
+        $this->xe->IMAGE_VEHICLE =  $this->input->xss_clean($this->input->post('IMAGE_VEHICLE'));
 
         if($this->xe->save())
         echo $this->messageSuccess;
@@ -89,6 +90,7 @@ class c_Xe extends Controller
         $this->xe->MS_THIET_BI = $this->input->xss_clean($this->input->post('MS_THIET_BI'));
         $this->xe->THE_TICH_THAT = $this->input->xss_clean($this->input->post('THE_TICH_THAT'));
         $this->xe->NGAY_CAP_NHAT = $this->input->xss_clean($this->input->post('NGAY_CAP_NHAT'));
+        $this->xe->IMAGE_VEHICLE =  $this->input->xss_clean($this->input->post('IMAGE_VEHICLE'));
 
         if($this->xe->save())
         echo $this->messageSuccess;

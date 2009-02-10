@@ -2,6 +2,8 @@
 
 class Upload extends Controller {
 
+    public static $upload_path = './resources/images/';
+
 	function Upload()
 	{
 		parent::Controller();
@@ -15,11 +17,12 @@ class Upload extends Controller {
 
 	function do_upload()
 	{
-		$config['upload_path'] = './resources/images/';
+		$config['upload_path'] = Upload::$upload_path;
 		$config['allowed_types'] = 'gif|jpg|png';
 		$config['max_size']	= '100';
 		$config['max_width']  = '1024';
 		$config['max_height']  = '768';
+        $config['encrypt_name'] = TRUE;
 
 		$this->load->library('upload', $config);
 
@@ -31,7 +34,9 @@ class Upload extends Controller {
 		}
 		else
 		{
-			$data = array('upload_data' => $this->upload->data());
+            $arr_rs = $this->upload->data();
+            $img_src = base_url()."resources/images/".$arr_rs['file_name'];
+			$data = array('upload_data' => $arr_rs , "img_src" => $img_src );
 
 			$this->load->view('utils/upload_success', $data);
 		}
