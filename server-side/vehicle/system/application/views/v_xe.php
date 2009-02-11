@@ -96,6 +96,13 @@
                 });
             }
 
+             //refresh grid
+            Xe.Filter = function(k)
+            {
+                jQuery("#list2").setPostData({SO_DANG_KY_XE:k});
+                $("#list2").trigger("reloadGrid");
+            }
+
             //update
             Xe.Update = function()
             {
@@ -260,6 +267,13 @@
             </div>
             <div id="fragment-2">
                 <div>
+                <form method="POST" id="vehicle_search_form" >
+                     <label>Số Đăng ký xe </label>
+                     <input type="text" name="SO_DANG_KY_XE" id="filter_SO_DANG_KY_XE" value="" class="input-text"  />
+                     <input type="button" value="Tìm" onclick="Xe.Filter($('#filter_SO_DANG_KY_XE').val())"/>
+                </form>
+                </div>
+                <div style="margin-top:5px;">
                     <table id="list2" class="scroll" style="margin-top:8px;" cellpadding="0" cellspacing="0"></table>
                     <div id="pager2" class="scroll" style="text-align:center;"></div>
                 </div>
@@ -348,8 +362,7 @@
             $("#SO_DANG_KY_XE").mask("**-**9999");          
 
             $('#container-1 > ul').tabs();
-
-
+            
             $("#main_form select[name='MS_MODEL_XE']").change(changeModelXeHandler);
         }
         jQuery("#main_form").ready(initForm);

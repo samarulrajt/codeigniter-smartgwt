@@ -83,6 +83,7 @@ class Xe extends Model {
         $page = $this->input->post('page');
         $sidx = $this->input->post('sidx');
         $sord = $this->input->post('sord');
+        $this->SO_DANG_KY_XE = $this->input->post('SO_DANG_KY_XE');
 
         if(!$sidx) $sidx =1;
         $count = $this->db->count_all('xe');
@@ -98,7 +99,15 @@ class Xe extends Model {
 
         $this->db->limit($limit, $start);
         $this->db->order_by("$sidx", "$sord");
+
+        //filter by MS_MODEL_XE
+        if($this->SO_DANG_KY_XE){
+            $this->db->where("SO_DANG_KY_XE = ", $this->SO_DANG_KY_XE);
+        }
         $objects = $this->db->get("xe")->result();
+
+        //echo  $this->db->last_query();
+
         $rows =  array();
 
         foreach($objects as $obj)
