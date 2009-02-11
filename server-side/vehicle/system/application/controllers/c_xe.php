@@ -82,6 +82,10 @@ class c_Xe extends Controller
         echo json_encode($this->xe->readByPagination());
     }
 
+    function SO_DANG_KY_XE_suggestion() {
+        $this->xe->SO_DANG_KY_XE_suggestion();
+    }
+
     function update()
     {
         $this->xe->STT_XE = $this->input->xss_clean($this->input->post('STT_XE'));

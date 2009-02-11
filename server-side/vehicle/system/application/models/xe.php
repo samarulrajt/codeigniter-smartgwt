@@ -75,6 +75,21 @@ class Xe extends Model {
         return $query->result();
     }
 
+    function SO_DANG_KY_XE_suggestion() {
+        $term = $this->input->post("q");
+        $limit = $this->input->post("limit");
+
+        $this->db->limit($limit);
+        $this->db->like("SO_DANG_KY_XE", $term);
+
+        $objects = $this->db->get("xe")->result();
+
+        foreach($objects as $obj)
+        {
+            echo $obj->SO_DANG_KY_XE."$$".$obj->IMAGE_VEHICLE. "\n";
+        }
+    }
+
 
     //TODO: check XSS and SQL injection here
     function readByPagination()

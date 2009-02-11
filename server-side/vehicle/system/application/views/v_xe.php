@@ -42,7 +42,7 @@
                         $("#main_form select[name='MS_MODEL_XE']").setValue(value);
                     }
                     else if(name == "IMAGE_VEHICLE"){
-                         Xe.setImageVehicle(value);
+                        Xe.setImageVehicle(value);
                     }
                     else{
                         $("#main_form input[name="+ name +"]").setValue(value);
@@ -96,7 +96,7 @@
                 });
             }
 
-             //refresh grid
+            //refresh grid
             Xe.Filter = function(k)
             {
                 jQuery("#list2").setPostData({SO_DANG_KY_XE:k});
@@ -122,6 +122,8 @@
             //delete
             Xe.Delete = function()
             {
+                if(!confirm("Bạn có đồng ý xoá dữ liệu chiếc xe này ?"))
+                    return;
                 InlineBox.showAjaxLoader();
                 jQuery.post("http://localhost/vehicle/index.php/c_xe/delete",{"STT_XE":$('#STT_XE').val()} ,
                 function(message){
@@ -267,11 +269,11 @@
             </div>
             <div id="fragment-2">
                 <div>
-                <form method="POST" id="vehicle_search_form" >
-                     <label>Số Đăng ký xe </label>
-                     <input type="text" name="SO_DANG_KY_XE" id="filter_SO_DANG_KY_XE" value="" class="input-text"  />
-                     <input type="button" value="Tìm" onclick="Xe.Filter($('#filter_SO_DANG_KY_XE').val())"/>
-                </form>
+                    <form method="POST" id="vehicle_search_form" >
+                        <label>Số Đăng ký xe </label>
+                        <input type="text" name="SO_DANG_KY_XE" id="filter_SO_DANG_KY_XE" value="" class="input-text"  />
+                        <input type="button" value="Tìm" onclick="Xe.Filter($('#filter_SO_DANG_KY_XE').val())"/>
+                    </form>
                 </div>
                 <div style="margin-top:5px;">
                     <table id="list2" class="scroll" style="margin-top:8px;" cellpadding="0" cellspacing="0"></table>
@@ -359,11 +361,25 @@
             $("#main_form").validate();
 
             //init input mask
-            $("#SO_DANG_KY_XE").mask("**-**9999");          
+            $("#SO_DANG_KY_XE").mask("**-**9999");
 
             $('#container-1 > ul').tabs();
-            
+
             $("#main_form select[name='MS_MODEL_XE']").change(changeModelXeHandler);
+
+            $("#filter_SO_DANG_KY_XE").autocomplete("http://localhost/vehicle/index.php/c_xe/SO_DANG_KY_XE_suggestion", {
+                width: 200,
+                max: 4,
+                highlight: false,
+                scroll: true,
+                scrollHeight: 300,
+                formatItem: function(data, i, n, value) {
+                    return "<img width=90 height=60 src='" + value.split("$$")[1] + "'/> " +  value.split("$$")[0];
+                },
+                formatResult: function(data, value) {
+                    return  value.split("$$")[0];
+                }
+            });
         }
         jQuery("#main_form").ready(initForm);
 
