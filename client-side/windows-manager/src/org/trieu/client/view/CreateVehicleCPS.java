@@ -1,10 +1,10 @@
 package org.trieu.client.view;
 
 import org.gwm.client.GInternalFrame;
-import org.trieu.client.WComposite;
 
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FormPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.Label;
@@ -12,18 +12,19 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.RadioButton;
 import com.google.gwt.user.client.ui.TextBox;
 
-public class CreateVehicleCPS extends WComposite {
+public class CreateVehicleCPS extends Composite {
 	final AbsolutePanel absolutePanel = new AbsolutePanel();
 	final AbsolutePanel absolutePanelHD = new AbsolutePanel();
 
 	public CreateVehicleCPS(GInternalFrame internalFrame) {
-		super(internalFrame);
+		//super(internalFrame);
 		absolutePanel.setSize("100%", "100%");
 		absolutePanel.setSize("100%", "100%");
 
 		final FormPanel formPanel = new FormPanel();
 		formPanel.setMethod(FormPanel.METHOD_POST);
 		initWidget(formPanel);
+
 
 		//final TabPanel tp = new TabPanel();
 		//tp.setSize("100%", "100%");
@@ -199,6 +200,7 @@ public class CreateVehicleCPS extends WComposite {
 		listBox_1.setMultipleSelect(true);
 		listBox_1.addItem("GPS bluetooth");
 		listBox_1.addItem("Satelite phone");
+		listBox_1.addItem("Test", "ets");
 		listBox_1.setSize("305px", "57px");
 		listBox_1.setVisibleItemCount(5);
 		absolutePanel.add(listBox_1, 108, 223);
@@ -274,6 +276,11 @@ public class CreateVehicleCPS extends WComposite {
 		textBox_18.setSize("119px", "22px");
 		absolutePanel.add(textBox_18, 587, 449);
 		setSize("950px", "700px");
+	}
+
+	private void $(String string) {
+		// TODO Auto-generated method stub
+
 	}
 
 }

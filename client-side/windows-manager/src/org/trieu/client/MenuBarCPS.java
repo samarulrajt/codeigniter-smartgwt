@@ -27,6 +27,7 @@ public class MenuBarCPS extends Composite {
 	private GDesktopPane desktop;
 	final MenuBar menuBar = new MenuBar();
 	final MenuBar menuBar_2 = new MenuBar(true);
+	final MenuBar menuBar_3 = new MenuBar(true);
 
 	public GDesktopPane getDesktop() {
 		return desktop;
@@ -74,6 +75,13 @@ public class MenuBarCPS extends Composite {
 		menuBar.addItem("<hr>", true, (Command) null);
 
 		menuBar.addItem("Quản lý nghiep vu ", menuBar_2);
+		menuBar.addItem("Quản lý GPS Module ", menuBar_3);
+
+		menuBar_3.addItem("Liet ke cac toa do", new Command() {
+			public void execute() {
+				showGPSLogs();
+			}
+		});
 
 		menuBar_2.addItem("Tìm Model Xe", new Command() {
 			public void execute() {
@@ -494,7 +502,18 @@ public class MenuBarCPS extends Composite {
 	}
 	public void ThesisXeWindow(){
 		GInternalFrame win = new DefaultGInternalFrame("Quan ly Xe");
-		win.setUrl("http://localhost/vehicle/index.php/Xe_c/read");
+		win.setUrl("http://www.google.com/mapmaker?hl=vn&gw=30&ll=10.777567,106.690936&spn=0.012163,0.023518&z=16&ctype=0");
+		win.setSize(1024, 510);
+		win.setResizable(true);
+		win.setMinimizable(true);
+		win.setMaximizable(true);
+		desktop.addFrame(win);
+		win.setVisible(true);
+	}
+
+	public void showGPSLogs(){
+		GInternalFrame win = new DefaultGInternalFrame("GPS logs");
+		win.setUrl("http://tantrieuf31.qsh.es/showLogs.aspx");
 		win.setSize(1024, 510);
 		win.setResizable(true);
 		win.setMinimizable(true);
