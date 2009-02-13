@@ -1,4 +1,6 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <base href="http://localhost/vehicle/">
         <title>Tracking Vehicle</title>
@@ -7,6 +9,7 @@
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/jqGrid/themes/basic/grid.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/theme/ui.all.css"  />
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/css/main-app.css"  />
+
         <style type="text/css">
             .toggler { width: 250px; height: 125px; }
             #drop { width: 240px; height: 105px; padding: 0.4em; }
@@ -14,8 +17,7 @@
         </style>
 
         <script type="text/javascript" src="http://localhost/vehicle/resources/jquery-1.3.1.js"></script>
-        <script type="text/javascript" src="http://localhost/vehicle/resources/jquery.ui.all.js"></script>
-        <script type="text/javascript" src="http://localhost/vehicle/resources/jqGrid/jquery.jqGrid.js"></script>
+        <script type="text/javascript" src="http://localhost/vehicle/resources/jquery.ui.all.js"></script>        
 
         <!--  Utils for Page -->
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/inlinebox.js"></script>
@@ -25,7 +27,8 @@
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.field.min.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.autocomplete.js"></script>
 
-        <script src="http://maps.google.com/maps?gwt=1&amp;file=api&amp;v=2&amp;key=ABQIAAAARCn-s2Rb8Qeo5T853_i8KhTPJQkavyWDxmYjA5lpKmshS0aD2hRdWozSifvfBxQ5FL5NdfrRlth89w" />
+        <script src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=ABQIAAAARCn-s2Rb8Qeo5T853_i8KhTOZcpRi3x4ZlxAD9RZHN-OsRMWtxSQpid_-Bah1NKhpWC5zY29rrD77g"
+                type="text/javascript"></script>
         <script  type="text/javascript">
             var Xe = {};
 
@@ -135,7 +138,7 @@
 
     <body>
 
-        <div id="map_canvas" style="width: 650px; height: 480px">
+        <div id="map_canvas" style="width: 650px; height: 550px">
 
         </div>
 
@@ -189,63 +192,14 @@
                 </div>
             </div>
             <hr>
-            <div>
-                <table id="list2" class="scroll" style="margin-top:8px;" cellpadding="0" cellspacing="0"></table>
-                <div id="pager2" class="scroll" style="text-align:center;"></div>
-            </div>
+
         </div>
 
 
     </body>
 
     <script type="text/javascript">
-        // $('#last_activity').val().toString()
-        var jGrid = null;
-        var colNamesT = new Array();
-        var colModelT = new Array();
-        var gridimgpath = 'http://localhost/vehicle/resources/jqGrid/themes/basic/images';
 
-        colNamesT.push('STT_XE');
-        colModelT.push({name:'STT_XE',index:'STT_XE', editable: false});
-        colNamesT.push('SO_DANG_KY_XE');
-        colModelT.push({name:'SO_DANG_KY_XE',index:'SO_DANG_KY_XE', editable: false});
-        colNamesT.push('MS_MODEL_XE');
-        colModelT.push({name:'MS_MODEL_XE',index:'MS_MODEL_XE', editable: false});
-        colNamesT.push('MS_THIET_BI');
-        colModelT.push({name:'MS_THIET_BI',index:'MS_THIET_BI', editable: false});
-        colNamesT.push('THE_TICH_THAT');
-        colModelT.push({name:'THE_TICH_THAT',index:'THE_TICH_THAT', editable: false});
-        colNamesT.push('NGAY_CAP_NHAT');
-        colModelT.push({name:'NGAY_CAP_NHAT',index:'NGAY_CAP_NHAT', editable: false});
-
-
-
-        var loadView = function()
-        {
-            jGrid = jQuery("#list2").jqGrid(
-            {
-                url:'http://localhost/vehicle/index.php/c_xe/read_json_format',
-                mtype : "POST",
-                datatype: "json",
-                colNames: colNamesT ,
-                colModel: colModelT ,
-                rowNum:10,
-                height: 270,
-                rowList:[10,20,30],
-                imgpath: gridimgpath,
-                pager: jQuery('#pager2'),
-                sortname: colNamesT[0],
-                viewrecords: true,
-                caption:"Xe",
-                onSelectRow: function(){
-                    var id = jQuery("#list2").getGridParam('selrow');
-                    Xe.setData(jQuery("#list2").getRowData(id));
-                }
-            });
-            jGrid.navGrid('#pager2',{edit:false,add:false,del:false, search: false, refresh: true});
-            $("#alertmod").remove();//FIXME
-        }
-        jQuery("#list2").ready(loadView);
 
 
         var initForm = function(){
@@ -256,26 +210,35 @@
 
             if (GBrowserIsCompatible()) {
                 var map = new GMap2(document.getElementById("map_canvas"));
+                map.setCenter(new  GLatLng(10.7534,106.6290), 15, G_SATELLITE_MAP);
 
+                map.addControl(new GSmallMapControl());
+                map.addControl(new GMapTypeControl());
                 map.setMapType(G_SATELLITE_MAP);
-               // map.addControl(new GLargeMapControl());
-                //map.addControl(new GMapTypeControl());
-               // map.addControl(new GScaleControl())
-                map.setCenter(new  GLatLng(10.75340,106.62900), 16, G_SATELLITE_MAP);
 
-                var img = "<img width='63' height='80' src='http://lh3.google.co.uk/image/dezfowler/RaaZ_qQiHwI/AAAAAAAAAAk/Awg1txBX0KA/s288/suave.jpg' />"
+                map.addControl(new GScaleControl())
+
+
+                var img = "<img width='83'  src='http://localhost/vehicle/resources/images/80cd2fce08f6e4fccbd64c2f4bf1f4c9.jpg' />"
                 var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 1"+ img +"</span>";
 
                 GEvent.addListener(marker, "dragstart", function() {
-                     logLatLon();
+                    logLatLon();
                 });
 
                 GEvent.addListener(marker, "dragend", function() {
-                     logLatLon();
+                    logLatLon();
                 });
 
                 map.addOverlay(marker);
-                //map.openInfoWindow(point, text);
+                var polyline = new GPolyline([
+                    new GLatLng(10.7534,106.6290),
+                    new GLatLng(10.7539,106.6299),
+                    new GLatLng(10.750890416685106,106.63033962249756)
+                ], "#FF0000", 10);
+                map.addOverlay(polyline);
+
+                map.openInfoWindow(point, text);
             }
 
         }

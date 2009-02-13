@@ -1,8 +1,10 @@
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
     <head>
         <base href="http://localhost/vehicle/">
         <title>Xe</title>
-        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+         <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
 
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/jqGrid/themes/basic/grid.css" />
         <link rel="stylesheet" type="text/css" media="screen" href="http://localhost/vehicle/resources/theme/ui.all.css"  />
@@ -24,6 +26,8 @@
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.form.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.field.min.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.autocomplete.js"></script>
+       
+
 
         <script  type="text/javascript">
             var Xe = {};
@@ -133,7 +137,92 @@
                 });
             }
 
+            var Hop_dong_thue_xe = {};
 
+            Hop_dong_thue_xe.data = {};
+            Hop_dong_thue_xe.setDataField = function(fieldName,fieldValue)
+            {
+                Hop_dong_thue_xe.data[fieldName] = fieldValue;
+            }
+
+            Hop_dong_thue_xe.setData = function(data)
+            {
+                jQuery.each(data, function(name, value) {
+                    Hop_dong_thue_xe.data[name] = value;
+                    $("#main_form input[name="+ name +"]").setValue(value);
+                });
+            }
+
+
+            Hop_dong_thue_xe.getData = function()
+            {
+                var obj = {};
+                $.each( $("#main_form").formSerialize().split("&"), function(i,n)
+                {
+                    var toks = n.split("=");
+                    obj[toks[0]] = toks[1];
+                }
+            );
+                Hop_dong_thue_xe.data = obj;
+                return Hop_dong_thue_xe.data;
+            }
+
+            //create
+            Hop_dong_thue_xe.Create = function()
+            {
+                if(!$("#main_form").valid())
+                    return;
+                InlineBox.showAjaxLoader();
+                jQuery.post("http://localhost/vehicle/index.php/c_hop_dong_thue_xe/create", Hop_dong_thue_xe.getData() ,
+                function(message){
+                    if(message != null){
+                        InlineBox.hideAjaxLoader();
+                        $("#list2").trigger("reloadGrid");
+                        InlineBox.showModalBox("Tạo Hop_dong_thue_xe " + message);
+                    }
+                });
+            }
+
+            //refresh grid
+            Hop_dong_thue_xe.Read = function()
+            {
+                InlineBox.showAjaxLoader();
+                jQuery.post("http://localhost/vehicle/index.php/c_hop_dong_thue_xe/read_json_format", {},
+                function(data){
+                    InlineBox.hideAjaxLoader();
+                    $("#list2").trigger("reloadGrid");
+                });
+            }
+
+            //update
+            Hop_dong_thue_xe.Update = function()
+            {
+                if(!$("#main_form").valid())
+                    return;
+
+                InlineBox.showAjaxLoader();
+                jQuery.post("http://localhost/vehicle/index.php/c_hop_dong_thue_xe/update", Hop_dong_thue_xe.getData() ,
+                function(message){
+                    InlineBox.hideAjaxLoader();
+                    $("#list2").trigger("reloadGrid");
+                    InlineBox.showModalBox("Cập nhật Hop_dong_thue_xe " + message);
+                });
+            }
+
+
+            //delete
+            Hop_dong_thue_xe.Delete = function()
+            {
+                if(!$("#main_form").valid())
+                    return;
+                InlineBox.showAjaxLoader();
+                jQuery.post("http://localhost/vehicle/index.php/c_hop_dong_thue_xe/delete",Hop_dong_thue_xe.getData() ,
+                function(message){
+                    InlineBox.hideAjaxLoader();
+                    $("#list2").trigger("reloadGrid");
+                    InlineBox.showModalBox("Xoá Hop_dong_thue_xe " + message);
+                });
+            }
         </script>
     </head>
 
@@ -172,7 +261,7 @@
                             <label>
                                 <span>Hình ảnh xe</span>
                                 <input type="hidden" name="IMAGE_VEHICLE" value=""/>
-                                <img id="IMAGE_VEHICLE" src="http://localhost/vehicle/resources/images/no-image.jpg" />
+                                <img id="IMAGE_VEHICLE" class="img_with_max" src="http://localhost/vehicle/resources/images/no-image.jpg" />
                                 <iframe name='image_vehicle_iframe' id='image_vehicle_iframe' scrolling="auto" style="border: 0px none; width: 400px; height: 60px;" src="http://localhost/vehicle/index.php/upload/"></iframe>
                             </label>
 
@@ -281,9 +370,70 @@
                 </div>
             </div>
             <div id="fragment-3">
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.</p>
+                <form method="POST" id="formXe_HDTX">
+                    <label>Số Đăng ký xe </label>
+                    <input type="text" name="SO_DANG_KY_XE" id="filter_SO_DANG_KY_XE" value="" class="input-text"  />
+                    
+                    <label>
+                        <span>MS hợp đồng</span>
+                        <input type="text" name="MS_HOP_DONG" value="" id="MS_HOP_DONG" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>MS chi nhánh</span>
+                        <input type="text" name="MS_CHI_NHANH" value="" id="MS_CHI_NHANH" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Chi nhánh quản lý xe</span>
+                        <input type="text" name="CHI_NHANH_QUAN_LY_XE" value="" id="CHI_NHANH_QUAN_LY_XE" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Cơ quan cho thuê</span>
+                        <input type="text" name="CO_QUAN_CHO_THUE_XE" value="" id="CO_QUAN_CHO_THUE_XE" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Mã hợp đồng</span>
+                        <input type="text" name="HOP_DONG" value="" id="HOP_DONG" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Loại hợp đồng</span>
+                        <input type="text" name="LOAI_HOP_DONG" value="" id="LOAI_HOP_DONG" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Người tiếp nhận</span>
+                        <input type="text" name="NGUOI_TIEP_NHAN" value="" id="NGUOI_TIEP_NHAN" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Số tiền</span>
+                        <input type="text" name="SO_TIEN_" value="" id="SO_TIEN_" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Thực trả</span>
+                        <input type="text" name="SOTHUC_TE_" value="" id="SOTHUC_TE_" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>MS thể xăng</span>
+                        <input type="text" name="MS_THE_XANG" value="" id="MS_THE_XANG" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Mã số PIN</span>
+                        <input type="text" name="MS_PIN" value="" id="MS_PIN" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+
+                    <label>
+                        <span>Mã số tài xế</span>
+                        <input type="text" name="MS_TAI_XE" value="" id="MS_TAI_XE" class="input-text" onchange="Hop_dong_thue_xe.setDataField(this.name,this.value);"  />
+                    </label>
+                </form>
             </div>
             <div id="fragment-4">
                 hop dong

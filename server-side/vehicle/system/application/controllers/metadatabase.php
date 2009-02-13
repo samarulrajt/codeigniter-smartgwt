@@ -103,7 +103,7 @@ class metadatabase extends Controller{
             while($row = mysql_fetch_array($result))
             {
                 $tableName = $row[0];
-                if( $tableName== "metadata"  ) {
+                if( $tableName== "metadata"  || $tableName== "xe") {
                     echo $tableName." <b>Skipped</b><br>";
                     continue;
                 }
@@ -199,11 +199,11 @@ class metadatabase extends Controller{
                     }
                     //  else if($option === "ci_model")
                     {
-                     //   $this->createCIModel($table_object);
+                        $this->createCIModel($table_object);
                     }
                     //  else if($option === "ci_controller")
                     {
-                     //   $this->createCIController($table_object);
+                        $this->createCIController($table_object);
                     }
 
                     {
@@ -214,7 +214,7 @@ class metadatabase extends Controller{
                         // $this->createCI_Language($table_object);
                     }
 
-                    //$this->createMenu($table_object);
+//                    $this->createMenu($table_object);
 
                     echo "<hr/>";
                 }

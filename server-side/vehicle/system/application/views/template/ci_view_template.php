@@ -139,7 +139,7 @@
                 <h1> <?=ucwords($object_fullname)?> </h1>
                 <hr>
 
-                <form method="POST" id="main_form" action="<?php echo site_url("c_$object_name")?>/">
+                <form method="POST" id="form_<?=ucwords($object_fullname)?>" action="<?php echo site_url("c_$object_name")?>/">
                     <?php foreach($fields as $field):?>                    
                     <label>
                         <span><?=$field->fullname?></span>
