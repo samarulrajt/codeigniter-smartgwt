@@ -24,7 +24,7 @@
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.form.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.field.min.js"></script>
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/jquery.autocomplete.js"></script>
-    
+
         <script  type="text/javascript">
             var Diadiem = {};
 
@@ -33,16 +33,27 @@
             {
                 Diadiem.data[fieldName] = fieldValue;
             }
-
+            var tem = null;
             Diadiem.setData = function(data)
             {
                 jQuery.each(data, function(name, value) {
                     Diadiem.data[name] = value;
                     $("#form_Diadiem input[name="+ name +"]").setValue(value);
 
+
+
                     if(parent.Chi_nhanh != null ){
-                        parent.Chi_nhanh.setData( {'diemdiemID':Diadiem.data['diemdiemID'] } );
+                        parent.Chi_nhanh.setData( {'diemdiemID': Diadiem.data['diemdiemID'] } );
                         parent.Chi_nhanh.setSelectedTab();
+                    }
+                    if(parent.Nhat_ki_hanh_trinh != null ){                      
+                        
+                        if(tem == "diemdiemKT")
+                            parent.Nhat_ki_hanh_trinh.setData( {'diemdiemKT': Diadiem.data['diemdiemID'] } );
+                        else if(tem == "diemdiemKH")
+                            parent.Nhat_ki_hanh_trinh.setData( {'diemdiemKH': Diadiem.data['diemdiemID'] } );
+                       
+                        parent.Nhat_ki_hanh_trinh.setSelectedTab();
                     }
                 });
             }
@@ -137,14 +148,14 @@
 
     <body>
         <iframe name='mapmarker_iframe' id='mapmarker_iframe' scrolling="auto" style="display:none;border: 0px none; width: 800px; height: 450px;" src="http://www.google.com/mapmaker">
-        </iframe>        
+        </iframe>
 
 
         <label for="googlemarker_link">Link: </label>
         <input type="text" id="googlemarker_link" name="googlemarker_link" value="" />
         <input type="button" value="Lấy LATLON" id="" onclick="Diadiem.getCurrentLatLon();" />
         <input type="button" value="Google Map Marker" id="" onclick="Diadiem.showMap();" />
-       
+
 
         <div style="width: 930px;">
             <div class="box">
