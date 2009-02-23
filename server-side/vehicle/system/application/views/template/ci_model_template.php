@@ -85,11 +85,18 @@ class <?=ucwords($object_name)?> extends Model {
         $jsonObject->page =  $page;
         $jsonObject->total = $total_pages;
         $jsonObject->records = $count;
-        $jsonObject->rows = $rows;      
-
-
+        $jsonObject->rows = $rows;
 
         return $jsonObject;
+    }
+
+    function isUsedKey($table,$keyName, $keyValue) {
+        if($keyValue)  {
+            $this->db->where($keyName, $keyValue);
+            $rows = $this->db->get($table)->result();
+            return sizeof($rows)==1;
+        }
+        return false;
     }
 
     function save()
@@ -97,7 +104,7 @@ class <?=ucwords($object_name)?> extends Model {
         // When we insert or update a record in CodeIgniter, we pass the results as an array:
         $db_array = array(
 <?php foreach($fields as $field):?>
-    <?php if(!$field->isKey): ?>
+    <?php if(!$field->isAutoIncrement): ?>
             "<?=$field->name?>" => $this-><?=$field->name?>,
     <?php endif;?>
 <?php endforeach;?>
@@ -106,7 +113,7 @@ class <?=ucwords($object_name)?> extends Model {
       $saveSuccess = false;
 
 <?php foreach($fields as $field):?>
- <?php if($field->isKey): ?>
+ <?php if($field->isAutoIncrement): ?>
         // If key was set in the controller, then we will update an existing record.
         if ($this-><?=$field->name?>)
         {
@@ -120,12 +127,16 @@ class <?=ucwords($object_name)?> extends Model {
                 $saveSuccess = false;
             }
             $this->db->trans_complete();
+            return $saveSuccess;
         }
-         // If key was not set in the controller, then we will insert a new record.
-        else
+<?php endif;?>
+<?php if ($field->isKey): ?>
+        // If key was set in the controller, then we will update an existing record.
+        if ($this->isUsedKey("<?=($object_name)?>","<?=$field->name?>", $this-><?=$field->name?>))
         {
             $this->db->trans_start();
-            $this->db->insert("<?=($object_name)?>", $db_array);
+            $this->db->where("<?=$field->name?>", $this-><?=$field->name?>);
+            $this->db->update("<?=($object_name)?>", $db_array);
             if($this->db->affected_rows() > 0) {
                 $saveSuccess = true;
             }
@@ -133,10 +144,21 @@ class <?=ucwords($object_name)?> extends Model {
                 $saveSuccess = false;
             }
             $this->db->trans_complete();
-         }
- <?php endif;?>
+            return $saveSuccess;
+        }
+<?php endif;?>
 <?php endforeach;?>
 
+        // If key was not set in the controller, then we will insert a new record.
+        $this->db->trans_start();
+        $this->db->insert("<?=($object_name)?>", $db_array);
+        if($this->db->affected_rows() > 0) {
+            $saveSuccess = true;
+        }
+        else {
+            $saveSuccess = false;
+        }
+        $this->db->trans_complete();
         return $saveSuccess;
     }
 

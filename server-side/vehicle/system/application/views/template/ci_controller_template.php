@@ -27,6 +27,7 @@ class c_<?=ucwords($object_name)?> extends Controller
 
          $this->load->helper('form');
          $this->load->helper('object2array');
+         $this->load->helper('url');
          $this->load->library('form_validation');
     }
 
@@ -58,7 +59,7 @@ class c_<?=ucwords($object_name)?> extends Controller
     function create()
     {
     <?php foreach($fields as $field):?>
-    <?php if(!$field->isKey): ?>
+    <?php if(!$field->isAutoIncrement): ?>
         $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
     <?php endif;?>
     <?php endforeach;?>

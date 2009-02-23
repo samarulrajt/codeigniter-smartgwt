@@ -4,26 +4,26 @@
         <title><?=ucwords($object_name)?></title>
         <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 
-        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url()?>resources/jqGrid/themes/basic/grid.css" />
-        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url()?>resources/theme/ui.all.css"  />
-        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo base_url()?>resources/css/main-app.css"  />
+        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo ("<?php echo base_url()?>")?>resources/jqGrid/themes/basic/grid.css" />
+        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo ("<?php echo base_url()?>")?>resources/theme/ui.all.css"  />
+        <link rel="stylesheet" type="text/css" media="screen" href="<?php echo ("<?php echo base_url()?>")?>resources/css/main-app.css"  />
         <style type="text/css">
             .toggler { width: 250px; height: 125px; }
             #drop { width: 240px; height: 105px; padding: 0.4em; }
             #drop .ui-widget-header { margin: 0; padding: 0.4em; text-align: center; }
         </style>
 
-        <script type="text/javascript" src="<?php echo base_url()?>resources/jquery-1.3.1.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/jquery.ui.all.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/jqGrid/jquery.jqGrid.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/jquery-1.3.1.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/jqGrid/jquery.jqGrid.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/jquery.ui.all.js"></script>        
 
         <!--  Utils for Page -->
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/inlinebox.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.validate.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.maskedinput-1.2.1.pack.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.form.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.field.min.js"></script>
-        <script type="text/javascript" src="<?php echo base_url()?>resources/utils/jquery.autocomplete.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/inlinebox.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/jquery.validate.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/jquery.maskedinput-1.2.1.pack.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/jquery.form.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/jquery.field.min.js"></script>
+        <script type="text/javascript" src="<?php echo ("<?php echo base_url()?>")?>resources/utils/jquery.autocomplete.js"></script>
 
         <script  type="text/javascript">
             var <?=ucwords($object_name)?> = {};
@@ -38,7 +38,7 @@
     {
         jQuery.each(data, function(name, value) {
            <?=ucwords($object_name)?>.data[name] = value;
-            $("#main_form input[name="+ name +"]").setValue(value);
+            $("#form_<?=ucwords($object_name)?> input[name="+ name +"]").setValue(value);
         });
     }
 
@@ -46,7 +46,7 @@
 <?=ucwords($object_name)?>.getData = function()
     {
         var obj = {};
-        $.each( $("#main_form").formSerialize().split("&"), function(i,n)
+        $.each( $("#form_<?=ucwords($object_name)?>").formSerialize().split("&"), function(i,n)
                         {
                             var toks = n.split("=");
                             obj[toks[0]] = toks[1];
@@ -59,10 +59,10 @@
     //create
 <?=ucwords($object_name)?>.Create = function()
     {
-        if(!$("#main_form").valid())
+        if(!$("#form_<?=ucwords($object_name)?>").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/create", $("#main_form").formToArray() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/create", $("#form_<?=ucwords($object_name)?>").formToArray() ,
         function(message){
             if(message != null){
                 InlineBox.hideAjaxLoader();
@@ -86,11 +86,11 @@
     //update
 <?=ucwords($object_name)?>.Update = function()
     {
-        if(!$("#main_form").valid())
+        if(!$("#form_<?=ucwords($object_name)?>").valid())
             return;
 
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/update", $("#main_form").formToArray() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/update", $("#form_<?=ucwords($object_name)?>").formToArray() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -102,10 +102,10 @@
     //delete
 <?=ucwords($object_name)?>.Delete = function()
     {
-        if(!$("#main_form").valid())
+        if(!$("#form_<?=ucwords($object_name)?>").valid())
             return;
         InlineBox.showAjaxLoader();
-        jQuery.post("<?php echo site_url("c_$object_name")?>/delete",$("#main_form").formToArray() ,
+        jQuery.post("<?php echo site_url("c_$object_name")?>/delete",$("#form_<?=ucwords($object_name)?>").formToArray() ,
         function(message){
             InlineBox.hideAjaxLoader();
             $("#list2").trigger("reloadGrid");
@@ -139,7 +139,7 @@
                 <h1> <?=ucwords($object_fullname)?> </h1>
                 <hr>
 
-                <form method="POST" id="form_<?=ucwords($object_fullname)?>" action="<?php echo site_url("c_$object_name")?>/">
+                <form method="POST" id="form_<?=ucwords($object_name)?>" action="<?php echo site_url("c_$object_name")?>/">
                     <?php foreach($fields as $field):?>                    
                     <label>
                         <span><?=$field->fullname?></span>
@@ -209,12 +209,12 @@
 
     var initForm = function(){
         //init validation form
-        $("#main_form").validate();
+        $("#form_<?=ucwords($object_name)?>").validate();
 
         //init input mask
 
     }
-    jQuery("#main_form").ready(initForm);
+    jQuery("#form_<?=ucwords($object_name)?>").ready(initForm);
 
     </script>
 
