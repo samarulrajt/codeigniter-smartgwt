@@ -22,8 +22,13 @@ class <?=ucwords($object_name)?> extends Model {
         parent::Model();
     }
 
-    function read()
+    function setFilterField()
     {
+        <?php foreach($fields as $field):?>
+        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
+        <?php endforeach;?>
+
+
         // BEGIN FILTER CRITERIA CHECK
         // If any of the following properties are set before <?=ucwords($object_name)?>->get() is called from the controller then we will include
         // a where statement for each of the properties that have been set.
@@ -36,11 +41,33 @@ class <?=ucwords($object_name)?> extends Model {
         <?php endforeach;?>
 
         // END FILTER CRITERIA CHECK
+    }
+
+    function read()
+    {
+        $this->setFilterField();
 
         // This will execute the query and collect the results and other properties of the query into an object.
         $query = $this->db->get("<?=($object_name)?>");
 
         return $query->result();
+    }
+
+    //please remove this if you need more security
+    function keyAutoComplete($field_name) {
+        $term = $this->input->post("q");
+        $limit = $this->input->post("limit");
+
+        $this->db->limit($limit);
+
+        $this->db->like($field_name, $term);     
+
+        $objects = $this->db->get("<?=($object_name)?>")->result_array();
+
+        foreach($objects as $obj)
+        {
+            echo $obj[$field_name]."\n";
+        }
     }
 
 
@@ -66,6 +93,8 @@ class <?=ucwords($object_name)?> extends Model {
 
         $this->db->limit($limit, $start);
         $this->db->order_by("$sidx", "$sord");
+        $this->setFilterField();
+
         $objects = $this->db->get("<?=($object_name)?>")->result();
         $rows =  array();
 
@@ -90,7 +119,7 @@ class <?=ucwords($object_name)?> extends Model {
         return $jsonObject;
     }
 
-    function isUsedKey($table,$keyName, $keyValue) {
+    private function isUsedKey($table,$keyName, $keyValue) {
         if($keyValue)  {
             $this->db->where($keyName, $keyValue);
             $rows = $this->db->get($table)->result();
@@ -99,7 +128,7 @@ class <?=ucwords($object_name)?> extends Model {
         return false;
     }
 
-    function save()
+    private function save()
     {
         // When we insert or update a record in CodeIgniter, we pass the results as an array:
         $db_array = array(
@@ -162,9 +191,34 @@ class <?=ucwords($object_name)?> extends Model {
         return $saveSuccess;
     }
 
+    function create()
+    {
+     <?php foreach($fields as $field):?>
+    <?php if(!$field->isAutoIncrement): ?>
+        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
+    <?php endif;?>
+    <?php endforeach;?>
+
+        return $this->save();
+    }
+
+    function update()
+    {
+    <?php foreach($fields as $field):?>
+        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
+    <?php endforeach;?>
+
+        return $this->save();
+    }
 
     function delete()
     {
+    <?php foreach($fields as $field):?>
+    <?php if($field->isKey): ?>
+        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
+    <?php endif;?>
+    <?php endforeach;?>
+
         $saveSuccess = false;
 <?php foreach($fields as $field):?>
  <?php if($field->isKey): ?>

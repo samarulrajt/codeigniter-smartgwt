@@ -17,7 +17,7 @@
         </style>
 
         <script type="text/javascript" src="http://localhost/vehicle/resources/jquery-1.3.1.js"></script>
-        <script type="text/javascript" src="http://localhost/vehicle/resources/jquery.ui.all.js"></script>        
+        <script type="text/javascript" src="http://localhost/vehicle/resources/jquery.ui.all.js"></script>
 
         <!--  Utils for Page -->
         <script type="text/javascript" src="http://localhost/vehicle/resources/utils/inlinebox.js"></script>
@@ -138,12 +138,6 @@
 
     <body>
 
-        <div id="map_canvas" style="width: 650px; height: 550px">
-
-        </div>
-
-        <br>
-
         <div style="width: 930px;">
             <div class="box">
                 <h1> Xe </h1>
@@ -151,41 +145,15 @@
 
                 <form method="POST" id="main_form" action="http://localhost/vehicle/index.php/c_xe/">
 
-                    <label>
-                        <span>STT xe</span>
-                        <input type="text" name="STT_XE" value="" id="STT_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
-                    </label>
 
                     <label>
-                        <span>Số ĐK</span>
+                        <span>Số Đang ky Xe</span>
                         <input type="text" name="SO_DANG_KY_XE" value="" id="SO_DANG_KY_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
-                    </label>
-
-                    <label>
-                        <span>Số model xe</span>
-                        <input type="text" name="MS_MODEL_XE" value="" id="MS_MODEL_XE" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
-                    </label>
-
-                    <label>
-                        <span>MS Thiết bị</span>
-                        <input type="text" name="MS_THIET_BI" value="" id="MS_THIET_BI" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
-                    </label>
-
-                    <label>
-                        <span>Thể tích thật</span>
-                        <input type="text" name="THE_TICH_THAT" value="" id="THE_TICH_THAT" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
-                    </label>
-
-                    <label>
-                        <span>Ngày cập nhật</span>
-                        <input type="text" name="NGAY_CAP_NHAT" value="" id="NGAY_CAP_NHAT" class="input-text" onchange="Xe.setDataField(this.name,this.value);"  />
                     </label>
                 </form>
 
                 <div class="spacer" id="form_control" >
-                    <a href="javascript:void(0)" onclick="Xe.Create()" class="green">Thêm</a>
-                    <a href="javascript:void(0)" onclick="Xe.Update()" class="green">Cập nhập</a>
-                    <a href="javascript:void(0)" onclick="Xe.Delete()" class="green">Xoá</a>
+                    <input type="button" value="Tìm" onclick="test();"/>
                 </div>
                 <div id="ajaxloader" style="display:none" >
                     <img  src="http://localhost/vehicle/resources/css/img/ajax-loader.gif" />
@@ -194,49 +162,326 @@
             <hr>
 
         </div>
+        <div id="map_container" style="width: 100%" >
+            <table border="0">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div id="map_canvas" style="width: 550px; height: 550px;">
+
+                            </div>
+                        </td>
+                        <td VALIGN="top">
+                            <div id="hanghoa" >
+                                <div id="map_details1" style="width: 40%; height: 550px; display:none">
+                                    <table border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã hãng</th>
+                                                <th>Loai hang</th>
+                                                <th>Tinh trang</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>H001-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-BD1</td>
+                                                <td>Buu pham</td>
+                                                <td>Da chuyen xong</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="map_details2" style="width: 40%; height: 550px; display:none">
+                                    <table border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã hãng</th>
+                                                <th>Loai hang</th>
+                                                <th>Tinh trang</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>H078-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H006-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H004-BD1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="map_details3" style="width: 40%; height: 550px; display:none">
+                                    <table border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã hãng</th>
+                                                <th>Loai hang</th>
+                                                <th>Tinh trang</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>H001-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-BD1</td>
+                                                <td>Buu pham</td>
+                                                <td>Da chuyen xong</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div id="map_details4" style="width: 40%; height: 550px; display:none">
+                                    <table border="1">
+                                        <thead>
+                                            <tr>
+                                                <th>Mã hãng</th>
+                                                <th>Loai hang</th>
+                                                <th>Tinh trang</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <td>H001-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-SG1</td>
+                                                <td>Buu pham</td>
+                                                <td>Dang chuyen</td>
+                                            </tr>
+                                            <tr>
+                                                <td>H002-BD1</td>
+                                                <td>Buu pham</td>
+                                                <td>Da chuyen xong</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+
+        </div>
+
+        <br>
+
+
 
 
     </body>
 
     <script type="text/javascript">
+        var xe = 1;
 
+        function test(){
+            if($("#SO_DANG_KY_XE").val() == "51-K12167"){
+                xe = 1;
+
+                $("#map_details1").show();
+                $("#map_details2").hide();
+                $("#map_details3").hide();
+                $("#map_details4").hide();
+            }
+            else if($("#SO_DANG_KY_XE").val() == "55-M18818"){
+                xe = 2;
+                $("#map_details2").show();
+                $("#map_details1").hide();
+                $("#map_details3").hide();
+                $("#map_details4").hide();
+            }
+            else if($("#SO_DANG_KY_XE").val() == "51-K18142"){
+                xe = 3;
+                $("#map_details3").show();
+                $("#map_details1").hide();
+                $("#map_details2").hide();
+                $("#map_details4").hide();
+            }
+            else if($("#SO_DANG_KY_XE").val() == "51-M83998"){
+                xe = 4;
+                $("#map_details4").show();
+                $("#map_details2").hide();
+                $("#map_details3").hide();
+                $("#map_details1").hide();
+            }
+
+
+            initForm();
+        }
 
 
         var initForm = function(){
             //init validation form
             $("#main_form").validate();
 
+            $("#SO_DANG_KY_XE").autocomplete("http://localhost/vehicle/index.php/c_xe/SO_DANG_KY_XE_suggestion", {
+                width: 200,
+                max: 4,
+                highlight: false,
+                scroll: true,
+                scrollHeight: 300,
+                formatItem: function(data, i, n, value) {
+                    return "<img width=90 height=60 src='" + value.split("$$")[1] + "'/> " +  value.split("$$")[0];
+                },
+                formatResult: function(data, value) {
+                    return  value.split("$$")[0];
+                }
+            });
+
             //init input mask
 
             if (GBrowserIsCompatible()) {
                 var map = new GMap2(document.getElementById("map_canvas"));
-                map.setCenter(new  GLatLng(10.7534,106.6290), 15, G_SATELLITE_MAP);
 
-                map.addControl(new GSmallMapControl());
+                if(xe == 1){
+                    map.setCenter(new  GLatLng(10.7534,106.6290), 13, G_SATELLITE_MAP);
+
+
+
+                    map.addControl(new GScaleControl())
+
+
+                    var img = "<img width='83'  src='http://localhost/vehicle/resources/images/80cd2fce08f6e4fccbd64c2f4bf1f4c9.jpg' />"
+                    var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 1"+ img +"</span>";
+
+                    GEvent.addListener(marker, "dragstart", function() {
+                        logLatLon();
+                    });
+
+                    GEvent.addListener(marker, "dragend", function() {
+                        logLatLon();
+                    });
+
+                    map.addOverlay(marker);
+                    var polyline = new GPolyline([
+                        new GLatLng(10.75340,106.62900),
+                        new GLatLng(10.754811,106.6305971),
+                        new GLatLng(10.753926,106.6344165802002),
+                        new GLatLng(10.75253,106.632270),
+                        new GLatLng(10.741656,106.619009),
+                        new GLatLng(10.72909,106.608581)
+                    ], "#FF0000", 10);
+                    map.addOverlay(polyline);
+                }
+                else  if(xe == 2){
+                    point = new  GLatLng(10.778337,106.686516);
+                    marker = new GMarker(point, {draggable: true});
+                    map.setCenter(point , 13, G_SATELLITE_MAP);
+
+
+                    map.addControl(new GScaleControl())
+
+
+                    var img = "<img width='83'  src='http://www.t-shn.com/images.php?type=3&f=xeCarrytruck1226561269.jpg' />"
+                    var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 2"+ img +"</span>";
+
+                    GEvent.addListener(marker, "dragstart", function() {
+                        logLatLon();
+                    });
+
+                    GEvent.addListener(marker, "dragend", function() {
+                        logLatLon();
+                    });
+
+                    map.addOverlay(marker);
+                    var polyline = new GPolyline([
+                        new  GLatLng(10.778337,106.686516),
+                        new GLatLng(10.754811,106.6305971),
+                        new GLatLng(10.753926,106.6344165802002),
+                        new GLatLng(10.75253,106.632270),
+                        new GLatLng(10.741656,106.619009),
+                        new GLatLng(10.72909,106.608581)
+                    ], "#FF0000", 10);
+                    map.addOverlay(polyline);
+                }
+                else if(xe == 3){
+                    point = new  GLatLng(10.778337,106.686516);
+                    marker = new GMarker(point, {draggable: true});
+                    map.setCenter(point , 13, G_SATELLITE_MAP);
+
+
+
+                    map.addControl(new GScaleControl());
+
+
+                    var img = "<img width='83'  src='http://localhost/vehicle/resources/images/images.jpg' />"
+                    var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 3"+ img +"</span>";
+
+                    GEvent.addListener(marker, "dragstart", function() {
+                        logLatLon();
+                    });
+
+                    GEvent.addListener(marker, "dragend", function() {
+                        logLatLon();
+                    });
+
+                    map.addOverlay(marker);
+                }
+                else if(xe == 4){
+                    point = new  GLatLng(10.759681,106.6728687);
+                    marker = new GMarker(point, {draggable: true});
+                    map.setCenter(point , 16, G_SATELLITE_MAP);
+
+                    map.addOverlay(marker);
+                    var polyline = new GPolyline([
+                        new  GLatLng(10.75675088,106.685400009),
+                        new GLatLng(10.754811,106.6305971),
+                        new GLatLng(10.76145183,106.6899061),
+                        new GLatLng(10.764466298,106.692502)
+
+                    ], "#FF0000", 10);
+                    map.addOverlay(polyline);
+
+                    map.addControl(new GScaleControl());
+
+
+                    var img = "<img width='83'  src='http://localhost/vehicle/resources/images/3e0cab7bb222a646f4f9c5903439e106.jpg' />"
+                    var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 4"+ img +"</span>";
+
+                    GEvent.addListener(marker, "dragstart", function() {
+                        logLatLon();
+                    });
+
+                    GEvent.addListener(marker, "dragend", function() {
+                        logLatLon();
+                    });
+
+                    map.addOverlay(marker);
+                };
+                map.addControl(new GLargeMapControl());
                 map.addControl(new GMapTypeControl());
                 map.setMapType(G_SATELLITE_MAP);
-
-                map.addControl(new GScaleControl())
-
-
-                var img = "<img width='83'  src='http://localhost/vehicle/resources/images/80cd2fce08f6e4fccbd64c2f4bf1f4c9.jpg' />"
-                var text = "<span id='vehicle_marker' style='color:red;font-weight:bold'> xe 1"+ img +"</span>";
-
-                GEvent.addListener(marker, "dragstart", function() {
-                    logLatLon();
-                });
-
-                GEvent.addListener(marker, "dragend", function() {
-                    logLatLon();
-                });
-
-                map.addOverlay(marker);
-                var polyline = new GPolyline([
-                    new GLatLng(10.7534,106.6290),
-                    new GLatLng(10.7539,106.6299),
-                    new GLatLng(10.750890416685106,106.63033962249756)
-                ], "#FF0000", 10);
-                map.addOverlay(polyline);
 
                 map.openInfoWindow(point, text);
             }

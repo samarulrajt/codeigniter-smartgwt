@@ -56,19 +56,20 @@ class c_<?=ucwords($object_name)?> extends Controller
          }
     }
 
+    function keyAutoComplete($field_name = "")
+    {
+        if($field_name != "")
+        $this-><?=$object_name?>->keyAutoComplete($field_name);
+        else
+         echo "";
+    }
+
     function create()
     {
-    <?php foreach($fields as $field):?>
-    <?php if(!$field->isAutoIncrement): ?>
-        $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
-    <?php endif;?>
-    <?php endforeach;?>
-    
-    if($this-><?=$object_name?>->save())
-        echo $this->messageSuccess;
-    else
-        echo $this->messageFail;         
-      
+        if($this-><?=$object_name?>->create())
+            echo $this->messageSuccess;
+        else
+            echo $this->messageFail;
     }
 
     function read()
@@ -82,31 +83,19 @@ class c_<?=ucwords($object_name)?> extends Controller
     }
 
     function update()
-    {
-    <?php foreach($fields as $field):?>
-    $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
-    <?php endforeach;?>
-       
-        if($this-><?=$object_name?>->save())
+    {       
+        if($this-><?=$object_name?>->update())
             echo $this->messageSuccess;
         else
-            echo $this->messageFail;
-        
+            echo $this->messageFail;        
     }
 
     function delete()
     {
-    <?php foreach($fields as $field):?>
-    <?php if($field->isKey): ?>
-    $this-><?=$object_name?>-><?=$field->name?> = $this->input->xss_clean($this->input->post('<?=$field->name?>'));
-    <?php endif;?>
-    <?php endforeach;?>
-
         if($this-><?=$object_name?>->delete())
             echo $this->messageSuccess;
         else
             echo $this->messageFail;
-        
     }
 
 
