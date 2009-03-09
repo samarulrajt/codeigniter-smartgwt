@@ -1,3 +1,5 @@
+http://code.google.com/p/trieu-thesis/
+
 1) For server-side
 
 Copy the folder in server-side to htdocs of Web Server.
