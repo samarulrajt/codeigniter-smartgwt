@@ -84,7 +84,7 @@ public class ModuleBluetoothGPSMidlet extends MIDlet implements CommandListener,
                 //if(GpsBt.instance().isConnected)
                 //setResponseMsg(sendLogs(getGPSLog()));
                 doAction(STATE_IDLE);
-                setResponseMsg(sendLogs(location.raw_msg));                
+                sendLogs(location.raw_msg);
 
             } else if (cmd == cmdStopSendGPSLog) {
                 doAction(STATE_IDLE);
@@ -238,7 +238,7 @@ public class ModuleBluetoothGPSMidlet extends MIDlet implements CommandListener,
 //                        } else if( logger.STATE == logger.PREPARE ){
                         location = gpsBt.getLocation();
                         setGPSLog(location.raw_msg);
-                        setResponseMsg(sendLogs(location.raw_msg));
+                        sendLogs(location.raw_msg);
                         try {
                             Thread.sleep(8888);
                         } catch (InterruptedException e) {
@@ -279,41 +279,48 @@ public class ModuleBluetoothGPSMidlet extends MIDlet implements CommandListener,
     }
     private static final String BASE_URL = "http://tantrieuf31.qsh.es";
     private static final String QUERY_URL = BASE_URL + "/log_service.aspx";
-    StringBuffer buffer = null;
-    InputStream is = null;
-    HttpConnection hc = null;
-    InputStreamReader isr = null;
+    private static boolean DONE = false;
 
-    public String sendLogs(String msg) {
-        StringBuffer buf = new StringBuffer();
-        buf.append(QUERY_URL);
-        buf.append("?raw_msg=");
-        buf.append(msg);
-        
-        try {
-            hc = (HttpConnection) Connector.open(buf.toString(), Connector.READ_WRITE);
-            hc.setRequestMethod(HttpConnection.GET);
+    public void sendLogs(final String msg) {
+        DONE = false;
+        if(!DONE)
+        new Thread() {
+            public void run() {
+                StringBuffer buffer = null;
+                InputStream is = null;
+                HttpConnection hc = null;
+                InputStreamReader isr = null;
+                StringBuffer buf = new StringBuffer();
+                buf.append(QUERY_URL);
+                buf.append("?raw_msg=");
+                buf.append(msg);
 
-            // Read the response from the server
-            is = hc.openInputStream();
-            isr = new InputStreamReader(is, "UTF8");
+                try {
+                    hc = (HttpConnection) Connector.open(buf.toString(), Connector.READ);
+                    hc.setRequestMethod(HttpConnection.GET);
 
-            buffer = new StringBuffer();
-            int ch;
-            while ((ch = isr.read()) > -1) {
-                buffer.append((char) ch);
+                    // Read the response from the server
+                    is = hc.openInputStream();
+                    isr = new InputStreamReader(is, "UTF8");
+
+                    buffer = new StringBuffer();
+                    int ch;
+                    while ((ch = isr.read()) > -1) {
+                        buffer.append((char) ch);
+                    }
+                    if (isr != null) {
+                        isr.close();
+                     is.close();
+                     hc.close();
+                    }
+                   
+                    ModuleBluetoothGPSMidlet.this.setResponseMsg(buffer.toString());
+                    DONE = true;
+                } catch (Exception ioe) {
+                    ModuleBluetoothGPSMidlet.this.setResponseMsg(ioe.toString());
+                }
             }
-            if (isr != null) {
-                isr.close();
-               // is.close();
-               // hc.close();
-            }
-
-            return buffer.toString();
-        } catch (Exception ioe) {
-            this.setResponseMsg(ioe.toString());
-        }
-        return buffer.toString();
+        }.start();
     }
 
     private String sendHttpPost(String url) {
